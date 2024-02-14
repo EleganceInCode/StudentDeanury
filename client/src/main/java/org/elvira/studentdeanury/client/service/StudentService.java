@@ -13,7 +13,7 @@ public interface StudentService {
     @NonNull
     Optional<StudentDto> findById(@NonNull Long studentId);
 
-    void create(@NonNull StudentDto request);
+    StudentDto create(@NonNull StudentDto request);
 
     @NonNull
     StudentDto update(@NonNull Long studentId, @NonNull StudentDto request);

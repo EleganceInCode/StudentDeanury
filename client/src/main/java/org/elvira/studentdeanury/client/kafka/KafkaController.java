@@ -3,34 +3,32 @@ package org.elvira.studentdeanury.client.kafka;
 import lombok.RequiredArgsConstructor;
 import org.elvira.studentdeanury.client.service.StudentService;
 
+import org.openapitools.api.StudentApi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.test.StudentDto;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/kafka")
 @RequiredArgsConstructor
-public class KafkaController {
+public class KafkaController implements StudentApi {// todo rename to StudentsController
 
     @Value("${app.kafka.kafkaMessageTopic}")
     private String topicName;
 
-    private final KafkaTemplate<String, StudentDto> kafkaTemplate;
+    private final StudentService studentService;
 
-    private StudentService studentService;
-
-    @PostMapping("/send")
-    public ResponseEntity<String> sendMessage(@RequestBody StudentDto student) {
-        kafkaTemplate.send(topicName,student);
-
-        return ResponseEntity.ok("Message sent to kafka");
+    @Override
+    public ResponseEntity<StudentDto> create(StudentDto studentDto) {
+        StudentDto result = studentService.create(studentDto);
+        return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/{id}")
     public ResponseEntity<Optional<StudentDto>> findById(@PathVariable Long id) {
         return ResponseEntity.ok(studentService.findById(id));
     }
@@ -38,7 +36,7 @@ public class KafkaController {
     @PutMapping("/{id}")
     public ResponseEntity<StudentDto> update(@PathVariable Long id, @RequestBody StudentDto student) {
         StudentDto updateStudent = studentService.update(id, student);
-        kafkaTemplate.send("student-updated", updateStudent);
+//        kafkaTemplate.send("student-updated", updateStudent);
 
         return ResponseEntity.ok(updateStudent);
     }
@@ -46,7 +44,7 @@ public class KafkaController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteStudent(@PathVariable Long id, @RequestBody StudentDto student) {
         studentService.delete(id);
-        kafkaTemplate.send("student-deleted",student);
+//        kafkaTemplate.send("student-deleted",student);
         return ResponseEntity.noContent().build();
     }
 }
