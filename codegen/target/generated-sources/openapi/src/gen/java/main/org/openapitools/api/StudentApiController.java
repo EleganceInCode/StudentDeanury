@@ -1,7 +1,7 @@
 package org.openapitools.api;
 
 import org.test.Error;
-import org.test.Student;
+import org.test.StudentDto;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-02-12T18:42:46.041302+03:00[Europe/Moscow]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-02-14T15:04:24.594861300+03:00[Europe/Moscow]")
 @Controller
 @RequestMapping("${openapi.openAPI.base-path:/api/v3}")
 public class StudentApiController implements StudentApi {

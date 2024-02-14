@@ -6,7 +6,7 @@
 package org.openapitools.api;
 
 import org.test.Error;
-import org.test.Student;
+import org.test.StudentDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -33,7 +33,7 @@ import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-02-12T18:42:46.041302+03:00[Europe/Moscow]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-02-14T17:35:50.357722200+03:00[Europe/Moscow]")
 @Validated
 @Tag(name = "students", description = "the students API")
 public interface StudentApi {
@@ -45,7 +45,7 @@ public interface StudentApi {
     /**
      * POST /student : Метод создания студента
      *
-     * @param student  (required)
+     * @param studentDto  (required)
      * @return Успешный ответ с созданным студентом (status code 200)
      *         or Неверное значение статуса (status code 400)
      *         or Всё нестандартное (status code 200)
@@ -56,7 +56,7 @@ public interface StudentApi {
         tags = { "students" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Успешный ответ с созданным студентом", content = {
-                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Student.class)))
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = StudentDto.class)))
             }),
             @ApiResponse(responseCode = "400", description = "Неверное значение статуса"),
             @ApiResponse(responseCode = "default", description = "Всё нестандартное", content = {
@@ -71,8 +71,8 @@ public interface StudentApi {
         consumes = { "application/json" }
     )
     
-    default ResponseEntity<List<Student>> create(
-        @Parameter(name = "Student", description = "", required = true) @Valid @RequestBody Student student
+    default ResponseEntity<List<StudentDto>> create(
+        @Parameter(name = "StudentDto", description = "", required = true) @Valid @RequestBody StudentDto studentDto
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
@@ -135,7 +135,7 @@ public interface StudentApi {
         tags = { "students" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Успешный ответ со списком студентов", content = {
-                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Student.class)))
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = StudentDto.class)))
             }),
             @ApiResponse(responseCode = "400", description = "Неверное значение статуса"),
             @ApiResponse(responseCode = "default", description = "Всё нестандартное", content = {
@@ -149,7 +149,7 @@ public interface StudentApi {
         produces = { "application/json" }
     )
     
-    default ResponseEntity<List<List<Student>>> findAll(
+    default ResponseEntity<List<List<StudentDto>>> findAll(
         
     ) {
         getRequest().ifPresent(request -> {
@@ -180,7 +180,7 @@ public interface StudentApi {
         tags = { "students" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Успешный ответ с одним студентом", content = {
-                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Student.class)))
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = StudentDto.class)))
             }),
             @ApiResponse(responseCode = "400", description = "Неверное значение статуса"),
             @ApiResponse(responseCode = "default", description = "Всё нестандартное", content = {
@@ -194,7 +194,7 @@ public interface StudentApi {
         produces = { "application/json" }
     )
     
-    default ResponseEntity<List<Student>> findById(
+    default ResponseEntity<List<StudentDto>> findById(
         @Parameter(name = "student_id", description = "Идентификатор студента", required = true, in = ParameterIn.PATH) @PathVariable("student_id") String studentId
     ) {
         getRequest().ifPresent(request -> {

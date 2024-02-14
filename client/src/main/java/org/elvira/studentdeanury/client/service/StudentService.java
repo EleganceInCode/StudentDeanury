@@ -1,22 +1,22 @@
 package org.elvira.studentdeanury.client.service;
 
 import lombok.NonNull;
-import org.test.Student;
+import org.test.StudentDto;
 
 import java.util.Optional;
 
 public interface StudentService {
 
     @NonNull
-    Optional<Student> findAll();
+    Optional<StudentDto> findAll();
 
     @NonNull
-    Optional<Student> findById(@NonNull Long studentId);
+    Optional<StudentDto> findById(@NonNull Long studentId);
 
-    void create(@NonNull Student request);
+    void create(@NonNull StudentDto request);
 
     @NonNull
-    Student update(@NonNull Long studentId, @NonNull Student request);
+    StudentDto update(@NonNull Long studentId, @NonNull StudentDto request);
 
     void delete(@NonNull Long studentId);
 

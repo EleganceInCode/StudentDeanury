@@ -15,11 +15,11 @@ import java.util.*;
 import javax.annotation.Generated;
 
 /**
- * Student
+ * StudentDto
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-02-12T18:42:46.041302+03:00[Europe/Moscow]")
-public class Student {
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-02-14T17:35:50.357722200+03:00[Europe/Moscow]")
+public class StudentDto {
 
   private Long id;
 
@@ -33,21 +33,21 @@ public class Student {
 
   private Integer age;
 
-  public Student() {
+  public StudentDto() {
     super();
   }
 
   /**
    * Constructor with only required parameters
    */
-  public Student(String login, String firstName, String middleName, Integer age) {
+  public StudentDto(String login, String firstName, String middleName, Integer age) {
     this.login = login;
     this.firstName = firstName;
     this.middleName = middleName;
     this.age = age;
   }
 
-  public Student id(Long id) {
+  public StudentDto id(Long id) {
     this.id = id;
     return this;
   }
@@ -67,7 +67,7 @@ public class Student {
     this.id = id;
   }
 
-  public Student login(String login) {
+  public StudentDto login(String login) {
     this.login = login;
     return this;
   }
@@ -87,7 +87,7 @@ public class Student {
     this.login = login;
   }
 
-  public Student firstName(String firstName) {
+  public StudentDto firstName(String firstName) {
     this.firstName = firstName;
     return this;
   }
@@ -107,7 +107,7 @@ public class Student {
     this.firstName = firstName;
   }
 
-  public Student middleName(String middleName) {
+  public StudentDto middleName(String middleName) {
     this.middleName = middleName;
     return this;
   }
@@ -127,7 +127,7 @@ public class Student {
     this.middleName = middleName;
   }
 
-  public Student lastName(String lastName) {
+  public StudentDto lastName(String lastName) {
     this.lastName = lastName;
     return this;
   }
@@ -147,7 +147,7 @@ public class Student {
     this.lastName = lastName;
   }
 
-  public Student age(Integer age) {
+  public StudentDto age(Integer age) {
     this.age = age;
     return this;
   }
@@ -175,13 +175,13 @@ public class Student {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Student student = (Student) o;
-    return Objects.equals(this.id, student.id) &&
-        Objects.equals(this.login, student.login) &&
-        Objects.equals(this.firstName, student.firstName) &&
-        Objects.equals(this.middleName, student.middleName) &&
-        Objects.equals(this.lastName, student.lastName) &&
-        Objects.equals(this.age, student.age);
+    StudentDto studentDto = (StudentDto) o;
+    return Objects.equals(this.id, studentDto.id) &&
+        Objects.equals(this.login, studentDto.login) &&
+        Objects.equals(this.firstName, studentDto.firstName) &&
+        Objects.equals(this.middleName, studentDto.middleName) &&
+        Objects.equals(this.lastName, studentDto.lastName) &&
+        Objects.equals(this.age, studentDto.age);
   }
 
   @Override
@@ -192,7 +192,7 @@ public class Student {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Student {\n");
+    sb.append("class StudentDto {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    login: ").append(toIndentedString(login)).append("\n");
     sb.append("    firstName: ").append(toIndentedString(firstName)).append("\n");

@@ -1,5 +1,7 @@
 package org.elvira.studentdeanury.server.service.impl;
 
+
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +28,9 @@ import static java.util.Optional.ofNullable;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@NoArgsConstructor(force = true)
 public class StudentServiceImpl implements StudentService {
+
     private final StudentRepository studentRepository;
 
     @Override

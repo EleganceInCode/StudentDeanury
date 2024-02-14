@@ -13,12 +13,11 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 @RestController
 @RequestMapping("/students")
 @AllArgsConstructor
-public class StudentController implements StudentApi{
+public class StudentController{
     private final StudentService studentService;
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public List<StudentResponse> findAll() {
-        org.te
         return studentService.findAll();
     }
 

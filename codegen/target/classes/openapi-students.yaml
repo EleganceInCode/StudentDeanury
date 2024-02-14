@@ -20,8 +20,8 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Students'
-        '400':          
+                  $ref: '#/components/schemas/StudentsDto'
+        '400':
           description: Неверное значение статуса
         'default':
           description: Всё нестандартное
@@ -39,7 +39,7 @@ paths:
         content:
           application/json:
               schema:
-                $ref: '#/components/schemas/Student'
+                $ref: '#/components/schemas/StudentDto'
       responses:
         '200':
           description: Успешный ответ с созданным студентом
@@ -48,22 +48,22 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Student'  
-        '400':          
+                  $ref: '#/components/schemas/StudentDto'
+        '400':
           description: Неверное значение статуса
         'default':
           description: Всё нестандартное
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error' 
+                $ref: '#/components/schemas/Error'
   /student/{student_id}:
     get:
       summary: Метод получения студента по идентификатору
       tags:
         - students
       operationId: findById
-      parameters: 
+      parameters:
         - name: student_id
           in: path
           required: true
@@ -79,8 +79,8 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Student'  
-        '400':          
+                  $ref: '#/components/schemas/StudentDto'
+        '400':
           description: Неверное значение статуса
         'default':
           description: Всё нестандартное
@@ -106,7 +106,7 @@ paths:
           description: Успешное удаление
           content:
             application/json: {}
-        '400':          
+        '400':
           description: Неверное значение статуса
         'default':
           description: Всё нестандартное
@@ -114,10 +114,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-          
+
 components:
   schemas:
-    Student:
+    StudentDto:
       type: object
       required:
         - login
@@ -147,7 +147,7 @@ components:
           example: 23
       xml:
         name: student
-    Subject:
+    SubjectDto:
       type: object
       required:
         - name
@@ -161,10 +161,10 @@ components:
           example: Higher mathematics
       xml:
         name: subject
-    Students:
+    StudentsDto:
       type: array
       items:
-        $ref: '#/components/schemas/Student'
+        $ref: '#/components/schemas/StudentDto'
     Error:
       type: object
       properties:

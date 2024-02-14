@@ -7,7 +7,7 @@ spring:
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
   jackson:
-    date-format: org.studentdeanery.example.openapitools.RFC3339DateFormat
+    date-format: org.openapitools.swaggerapi.utils.RFC3339DateFormat
     serialization:
       write-dates-as-timestamps: false
 

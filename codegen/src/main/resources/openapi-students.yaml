@@ -20,7 +20,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Students'
+                  $ref: '#/components/schemas/StudentsDto'
         '400':
           description: Неверное значение статуса
         'default':
@@ -39,7 +39,7 @@ paths:
         content:
           application/json:
               schema:
-                $ref: '#/components/schemas/Student'
+                $ref: '#/components/schemas/StudentDto'
       responses:
         '200':
           description: Успешный ответ с созданным студентом
@@ -48,7 +48,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Student'
+                  $ref: '#/components/schemas/StudentDto'
         '400':
           description: Неверное значение статуса
         'default':
@@ -79,7 +79,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Student'
+                  $ref: '#/components/schemas/StudentDto'
         '400':
           description: Неверное значение статуса
         'default':
@@ -164,7 +164,7 @@ components:
     StudentsDto:
       type: array
       items:
-        $ref: '#/components/schemas/Student'
+        $ref: '#/components/schemas/StudentDto'
     Error:
       type: object
       properties:

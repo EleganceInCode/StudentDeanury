@@ -15,28 +15,28 @@ import java.util.*;
 import javax.annotation.Generated;
 
 /**
- * Subject
+ * SubjectDto
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-02-12T18:42:46.041302+03:00[Europe/Moscow]")
-public class Subject {
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-02-14T17:35:50.357722200+03:00[Europe/Moscow]")
+public class SubjectDto {
 
   private Long id;
 
   private String name;
 
-  public Subject() {
+  public SubjectDto() {
     super();
   }
 
   /**
    * Constructor with only required parameters
    */
-  public Subject(String name) {
+  public SubjectDto(String name) {
     this.name = name;
   }
 
-  public Subject id(Long id) {
+  public SubjectDto id(Long id) {
     this.id = id;
     return this;
   }
@@ -56,7 +56,7 @@ public class Subject {
     this.id = id;
   }
 
-  public Subject name(String name) {
+  public SubjectDto name(String name) {
     this.name = name;
     return this;
   }
@@ -84,9 +84,9 @@ public class Subject {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Subject subject = (Subject) o;
-    return Objects.equals(this.id, subject.id) &&
-        Objects.equals(this.name, subject.name);
+    SubjectDto subjectDto = (SubjectDto) o;
+    return Objects.equals(this.id, subjectDto.id) &&
+        Objects.equals(this.name, subjectDto.name);
   }
 
   @Override
@@ -97,7 +97,7 @@ public class Subject {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Subject {\n");
+    sb.append("class SubjectDto {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("}");

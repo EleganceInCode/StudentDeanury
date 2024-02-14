@@ -1,0 +1,10 @@
+org\openapitools\api\StudentApiController.class
+org\test\StudentDto.class
+org\openapitools\OpenApiGeneratorApplication.class
+org\openapitools\api\ApiUtil.class
+org\openapitools\RFC3339DateFormat.class
+org\openapitools\api\StudentApi.class
+org\openapitools\configuration\SpringDocConfiguration.class
+org\test\SubjectDto.class
+org\test\Error.class
+org\openapitools\configuration\HomeController.class
