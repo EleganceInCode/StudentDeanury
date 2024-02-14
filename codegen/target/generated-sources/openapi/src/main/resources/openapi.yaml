@@ -1,0 +1,195 @@
+openapi: 3.0.3
+info:
+  title: База данных для деканата OpenAPI спецификация
+  version: 1.0.11
+servers:
+- description: Dev server
+  url: http://localhost:8080/api/v3/
+paths:
+  /student:
+    get:
+      operationId: findAll
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Students'
+                type: array
+          description: Успешный ответ со списком студентов
+        "400":
+          description: Неверное значение статуса
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Всё нестандартное
+      summary: Метод получения списка студентов
+      tags:
+      - students
+      x-accepts: application/json
+      x-tags:
+      - tag: students
+    post:
+      operationId: create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Student'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Student'
+                type: array
+          description: Успешный ответ с созданным студентом
+        "400":
+          description: Неверное значение статуса
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Всё нестандартное
+      summary: Метод создания студента
+      tags:
+      - students
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: students
+  /student/{student_id}:
+    delete:
+      operationId: delete
+      parameters:
+      - description: Идентификатор студента
+        example: 4ad76228-517f-4496-aa6c-eef36d3de35a
+        explode: false
+        in: path
+        name: student_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json: {}
+          description: Успешное удаление
+        "400":
+          description: Неверное значение статуса
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Всё нестандартное
+      summary: Удаление студента
+      tags:
+      - students
+      x-accepts: application/json
+      x-tags:
+      - tag: students
+    get:
+      operationId: findById
+      parameters:
+      - description: Идентификатор студента
+        example: 4ad76228-517f-4496-aa6c-eef36d3de35a
+        explode: false
+        in: path
+        name: student_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Student'
+                type: array
+          description: Успешный ответ с одним студентом
+        "400":
+          description: Неверное значение статуса
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Всё нестандартное
+      summary: Метод получения студента по идентификатору
+      tags:
+      - students
+      x-accepts: application/json
+      x-tags:
+      - tag: students
+components:
+  schemas:
+    Student:
+      example:
+        firstName: Ivan
+        lastName: Ivanov
+        middleName: Ivanovich
+        id: 0
+        login: Ivan123
+        age: 23
+      properties:
+        id:
+          format: int64
+          type: integer
+        login:
+          example: Ivan123
+          type: string
+        firstName:
+          example: Ivan
+          type: string
+        middleName:
+          example: Ivanovich
+          type: string
+        lastName:
+          example: Ivanov
+          type: string
+        age:
+          example: 23
+          format: int32
+          type: integer
+      required:
+      - age
+      - firstName
+      - login
+      - middleName
+      type: object
+      xml:
+        name: student
+    Subject:
+      properties:
+        id:
+          format: int64
+          type: integer
+        name:
+          example: Higher mathematics
+          type: string
+      required:
+      - name
+      type: object
+      xml:
+        name: subject
+    Students:
+      items:
+        $ref: '#/components/schemas/Student'
+      type: array
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      type: object
