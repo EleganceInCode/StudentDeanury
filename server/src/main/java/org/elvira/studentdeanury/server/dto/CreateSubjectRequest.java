@@ -1,4 +1,4 @@
-package org.elvira.studentdeanury.server.controller.dto;
+package org.elvira.studentdeanury.server.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package org.elvira.studentdeanury.server.controller.dto;
+package org.elvira.studentdeanury.server.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,8 +14,9 @@ import lombok.experimental.Accessors;
 public class CreateStudentRequest {
     private Long id;
     private String login;
-    private String name;
-    private String surname;
+    private String firstName;
+    private String middleName;
+    private String lastName;
     private Integer age;
     private CreateSubjectRequest subject;
 }

@@ -1,9 +1,9 @@
-package org.elvira.studentdeanury.server.listener;
+package org.elvira.studentdeanury.client.kafka.listener;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.elvira.studentdeanury.server.controller.dto.CreateStudentRequest;
-import org.elvira.studentdeanury.server.service.StudentService;
+import org.openapitools.studentdeanery.api.StudentApi;
+import org.openapitools.studentdeanery.model.StudentDto;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -18,12 +18,12 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class KafkaMessageListener {
 
-    private final StudentService studentService;
+    private final StudentApi studentService;
 
-    @KafkaListener(topics = "$app.kafka.kafkaMessageTopic",
+    @KafkaListener(topics = "${app.kafka.kafkaMessageTopic}",
         groupId = "${app.kafka.kafkaMessageGroupId}",
         containerFactory = "kafkaListenerContainerFactory")
-    public void listen(@Payload CreateStudentRequest student,
+    public void listen(@Payload StudentDto student,
                        @Header(value = KafkaHeaders.RECEIVED_KEY, required = false) UUID key,
                        @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
                        @Header(KafkaHeaders.RECEIVED_PARTITION) Integer partition,
@@ -31,7 +31,7 @@ public class KafkaMessageListener {
         log.info("Received message: {}", student);
         log.info("Key: {}; Patition: {}; Topic: {}; TimeStamp: {};", key, partition, topic, timestamp);
 
-        studentService.createStudent(student);
+        studentService.create(student);
 
     }
 }

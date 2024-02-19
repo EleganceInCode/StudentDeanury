@@ -1,23 +1,7 @@
-server:
-  port: 8081
-
 spring:
-  kafka:
-    bootstrap-servers: localhost:9092
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
   jackson:
-    date-format: org.openapitools.swaggerapi.utils.RFC3339DateFormat
     serialization:
       write-dates-as-timestamps: false
-
-app:
-  kafka:
-    kafkaMessageTopic: "message-topic"
-    kafkaMessageGroupId: "kafka-message-group-id"
-
-logging:
-  level:
-    org: ERROR
-
 

@@ -1,8 +1,8 @@
 package org.elvira.studentdeanury.server.service;
 
 import lombok.NonNull;
-import org.elvira.studentdeanury.server.controller.dto.CreateStudentRequest;
-import org.elvira.studentdeanury.server.controller.dto.StudentResponse;
+import org.elvira.studentdeanury.server.dto.CreateStudentRequest;
+import org.elvira.studentdeanury.server.dto.StudentResponse;
 
 import java.util.List;
 

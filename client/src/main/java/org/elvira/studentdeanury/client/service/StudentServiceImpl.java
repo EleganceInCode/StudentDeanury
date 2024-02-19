@@ -3,59 +3,84 @@ package org.elvira.studentdeanury.client.service;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import org.openapitools.api.StudentApi;
+
+
+import org.openapitools.studentdeanery.api.StudentApi;
+import org.openapitools.studentdeanery.model.StudentDto;
+import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import org.test.StudentDto;
+import org.springframework.web.context.request.NativeWebRequest;
 
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-
 @Service
 @AllArgsConstructor
 @Slf4j
-public class StudentServiceImpl implements StudentService {
+public class StudentServiceImpl implements StudentApi {
+    private final String topicName = "message-topic";
 
+    private final KafkaTemplate<String, StudentDto> kafkaTemplate;
     private final List<StudentDto> message = new CopyOnWriteArrayList<>();
 
     @Override
-    public @NonNull Optional<StudentDto> findAll() {
+    public ResponseEntity<List<StudentDto>> findAll() {
         log.info("find all method called");
 
-        return Optional.of((StudentDto) message);
+        return ResponseEntity.ok(message);
+    }
+
+
+    @Override
+    public ResponseEntity<StudentDto> findById(Long studentId) {
+        return message.stream()
+                .filter(st -> st.getId().equals(studentId))
+                .findFirst()
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+
+    @Override
+    public Optional<NativeWebRequest> getRequest() {
+        return StudentApi.super.getRequest();
     }
 
     @Override
-    public @NonNull Optional<StudentDto> findById(@NonNull Long studentId) {
-        log.info("findById method called");
-
-        return message.stream().filter(it -> it.getId().equals(studentId)).findFirst();
+    public ResponseEntity<Void> delete(Long studentId) {
+        log.info("delete method called");
+        boolean isRemove = message.removeIf(student -> false);
+        if(isRemove) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
+
     @Override
-    public void create(@NonNull StudentDto student) {
+    public ResponseEntity<List<StudentDto>> create(@NonNull StudentDto student) {
         log.info("createStudent method called");
         message.add(student);
+        kafkaTemplate.send(topicName, student);
 
+        return ResponseEntity.ok(Collections.singletonList(student));
     }
 
-    @Override
-    public @NonNull StudentDto update(@NonNull Long studentId, @NonNull StudentDto request) {
-        log.info("update method called");
-        StudentDto updateStudent = findById(studentId).orElseThrow(()-> new RuntimeException("Student not found with id: " + studentId));
-        updateStudent.setFirstName(request.getFirstName());
-        updateStudent.setLastName(request.getLastName());
-        updateStudent.setAge(request.getAge());
+//    @Override
+//    public @NonNull StudentDto update(@NonNull Long studentId, @NonNull StudentDto request) {
+//        log.info("update method called");
+//        StudentDto updateStudent = findById(studentId).orElseThrow(()-> new RuntimeException("Student not found with id: " + studentId));
+//        updateStudent.setFirstName(request.getFirstName());
+//        updateStudent.setLastName(request.getLastName());
+//        updateStudent.setAge(request.getAge());
+//
+//        return updateStudent;
+//    }
 
-        return updateStudent;
-    }
-
-    @Override
-    public void delete(@NonNull Long studentId) {
-        log.info("delete method called");
-        message.removeIf(student -> student.getId().equals(studentId));
-    }
 
 }

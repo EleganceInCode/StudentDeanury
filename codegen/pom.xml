@@ -38,8 +38,8 @@
                             <configOptions>
                                 <sourceFolder>src/gen/java/main</sourceFolder>
                             </configOptions>
-<!--                            <packageName>org.test</packageName>-->
-                            <modelPackage>org.test</modelPackage>
+                            <modelPackage>org.openapitools.studentdeanery.model</modelPackage>
+                            <apiPackage>org.openapitools.studentdeanery.api</apiPackage>
                         </configuration>
                     </execution>
                 </executions>

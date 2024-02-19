@@ -1,5 +1,13 @@
 version: '3'
 services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres_db
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_PASSWORD=deanery-server
+      - POSTGRES_DB=postgres_db
   zookeeper:
     image: confluentinc/cp-zookeeper:6.2.0
     environment:

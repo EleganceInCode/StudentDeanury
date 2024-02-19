@@ -28,10 +28,13 @@ public class StudentDao {
     private String login;
 
 
-    private String name;
+    private String firstName;
 
 
-    private String surname;
+    private String middleName;
+
+
+    private String lastName;
 
 
     private Integer age;

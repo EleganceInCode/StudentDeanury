@@ -3,7 +3,7 @@ info:
   title:  База данных для деканата OpenAPI спецификация
   version: 1.0.11
 servers:
-  - url: http://localhost:8080/api/v3/
+  - url: /v3/api-docs
     description: Dev server
 paths:
   /student:
@@ -18,9 +18,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/StudentsDto'
+                $ref: '#/components/schemas/StudentsDto'
         '400':
           description: Неверное значение статуса
         'default':
@@ -69,17 +67,15 @@ paths:
           required: true
           description: Идентификатор студента
           schema:
-            type: string
-          example: 4ad76228-517f-4496-aa6c-eef36d3de35a
+            type: integer
+            format: int64
       responses:
         '200':
           description: Успешный ответ с одним студентом
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/StudentDto'
+                $ref: '#/components/schemas/StudentDto'
         '400':
           description: Неверное значение статуса
         'default':
@@ -99,8 +95,8 @@ paths:
           required: true
           description: Идентификатор студента
           schema:
-            type: string
-          example: 4ad76228-517f-4496-aa6c-eef36d3de35a
+            type: integer
+            format: int64
       responses:
         '200':
           description: Успешное удаление

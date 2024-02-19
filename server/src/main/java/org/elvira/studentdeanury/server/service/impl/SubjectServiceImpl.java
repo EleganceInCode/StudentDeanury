@@ -4,9 +4,9 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.elvira.studentdeanury.server.controller.dto.CreateSubjectRequest;
-import org.elvira.studentdeanury.server.controller.dto.StudentResponse;
-import org.elvira.studentdeanury.server.controller.dto.SubjectResponse;
+import org.elvira.studentdeanury.server.dto.CreateSubjectRequest;
+import org.elvira.studentdeanury.server.dto.StudentResponse;
+import org.elvira.studentdeanury.server.dto.SubjectResponse;
 import org.elvira.studentdeanury.server.repository.SubjectRepository;
 import org.elvira.studentdeanury.server.repository.dao.SubjectDao;
 import org.elvira.studentdeanury.server.service.StudentService;
@@ -93,7 +93,7 @@ public class SubjectServiceImpl implements SubjectService {
         Set<StudentResponse> studentResponses = new HashSet<>();
 
         SubjectResponse subject = findById(subjectId);
-        List<StudentResponse> students = subject.getStudents();
+        Set<StudentResponse> students = subject.getStudents();
         for (StudentResponse student : students) {
             studentResponses.add(mapStudentToStudentResponse(student));
         }
@@ -102,11 +102,14 @@ public class SubjectServiceImpl implements SubjectService {
 
     private StudentResponse mapStudentToStudentResponse(StudentResponse student) {
         StudentResponse studentResponse = new StudentResponse();
+        
         studentResponse.setId(student.getId());
         studentResponse.setLogin(student.getLogin());
-        studentResponse.setName(student.getName());
-        studentResponse.setSurname(student.getSurname());
+        studentResponse.setFirstName(student.getFirstName());
+        studentResponse.setMiddleName(student.getMiddleName());
+        studentResponse.setLastName(student.getLastName());
         studentResponse.setAge(student.getAge());
+        studentResponse.setSubjectResponses(student.getSubjectResponses());
 
         return studentResponse;
     }

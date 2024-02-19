@@ -5,10 +5,10 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.elvira.studentdeanury.server.controller.dto.CreateStudentRequest;
-import org.elvira.studentdeanury.server.controller.dto.CreateSubjectRequest;
-import org.elvira.studentdeanury.server.controller.dto.StudentResponse;
-import org.elvira.studentdeanury.server.controller.dto.SubjectResponse;
+import org.elvira.studentdeanury.server.dto.CreateStudentRequest;
+import org.elvira.studentdeanury.server.dto.CreateSubjectRequest;
+import org.elvira.studentdeanury.server.dto.StudentResponse;
+import org.elvira.studentdeanury.server.dto.SubjectResponse;
 import org.elvira.studentdeanury.server.repository.StudentRepository;
 import org.elvira.studentdeanury.server.repository.dao.StudentDao;
 import org.elvira.studentdeanury.server.repository.dao.SubjectDao;
@@ -82,8 +82,8 @@ public class StudentServiceImpl implements StudentService {
         return new StudentResponse()
                 .setLogin(student.getLogin())
                 .setAge(student.getAge())
-                .setName(student.getName())
-                .setSurname(student.getSurname())
+                .setFirstName(student.getFirstName())
+                .setMiddleName(student.getMiddleName())
                 .setSubjectResponses(buildSubjectResponses(student.getSubjectDao()));
     }
 
@@ -110,15 +110,17 @@ public class StudentServiceImpl implements StudentService {
         return new StudentDao()
                 .setLogin(request.getLogin())
                 .setAge(request.getAge())
-                .setName(request.getName())
-                .setSurname(request.getSurname())
+                .setFirstName(request.getFirstName())
+                .setMiddleName(request.getMiddleName())
+                .setLastName(request.getLastName())
                 .setSubjectDao(subjects);
     }
 
     private void studentUpdate(StudentDao student, CreateStudentRequest request) {
         ofNullable(request.getLogin()).map(student::setLogin);
-        ofNullable(request.getName()).map(student::setName);
-        ofNullable(request.getSurname()).map(student::setSurname);
+        ofNullable(request.getFirstName()).map(student::setFirstName);
+        ofNullable(request.getMiddleName()).map(student::setMiddleName);
+        ofNullable(request.getLastName()).map(student::setLastName);
         ofNullable(request.getAge()).map(student::setAge);
 
         CreateSubjectRequest subjectRequest = request.getSubject();

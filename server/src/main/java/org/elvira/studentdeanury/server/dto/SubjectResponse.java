@@ -1,9 +1,8 @@
-package org.elvira.studentdeanury.server.controller.dto;
+package org.elvira.studentdeanury.server.dto;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.util.List;
 import java.util.Set;
 
 @Data
@@ -11,9 +10,9 @@ import java.util.Set;
 public class SubjectResponse {
     private String name;
 
-    private List<StudentResponse> students;
+    private Set<StudentResponse> students;
 
     public void setStudents(Set<StudentResponse> studentResponses) {
-        this.students = List.copyOf(studentResponses);
+        this.students = studentResponses;
     }
 }

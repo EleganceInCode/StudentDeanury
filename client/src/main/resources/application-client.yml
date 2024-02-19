@@ -9,5 +9,5 @@ spring:
 logging:
   level:
     org: ERROR
-
+    org.springdoc: DEBUG
 

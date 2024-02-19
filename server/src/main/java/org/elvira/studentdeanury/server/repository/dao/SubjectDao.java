@@ -2,7 +2,7 @@ package org.elvira.studentdeanury.server.repository.dao;
 
 import lombok.*;
 import lombok.experimental.Accessors;
-import org.elvira.studentdeanury.server.controller.dto.StudentResponse;
+import org.elvira.studentdeanury.server.dto.StudentResponse;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -52,8 +52,9 @@ public class SubjectDao {
         for (StudentResponse studentResponse : studentResponses) {
             StudentDao student = new StudentDao();
             student.setLogin(studentResponse.getLogin());
-            student.setName(studentResponse.getName());
-            student.setSurname(studentResponse.getSurname());
+            student.setFirstName(studentResponse.getFirstName());
+            student.setMiddleName(studentResponse.getMiddleName());
+            student.setLastName(studentResponse.getLastName());
             student.setAge(studentResponse.getAge());
 
             students.add(student);
