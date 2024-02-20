@@ -18,20 +18,16 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class KafkaMessageListener {
 
-    private final StudentApi studentService;
-
-    @KafkaListener(topics = "${app.kafka.kafkaMessageTopic}",
+    @KafkaListener(topics = "${app.kafka.kafkaStudentStatusServiceTopic}",
         groupId = "${app.kafka.kafkaMessageGroupId}",
-        containerFactory = "kafkaListenerContainerFactory")
+        containerFactory = "studentStatusServiceConcurrentKafkaListenerContainerFactory")
     public void listen(@Payload StudentDto student,
-                       @Header(value = KafkaHeaders.RECEIVED_KEY, required = false) UUID key,
+                       @Header(value = KafkaHeaders.RECEIVED_KEY, required = false) String key,
                        @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
                        @Header(KafkaHeaders.RECEIVED_PARTITION) Integer partition,
                        @Header(KafkaHeaders.RECEIVED_TIMESTAMP) Long timestamp) {
         log.info("Received message: {}", student);
         log.info("Key: {}; Patition: {}; Topic: {}; TimeStamp: {};", key, partition, topic, timestamp);
-
-        studentService.create(student);
 
     }
 }

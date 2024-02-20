@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.openapitools.studentdeanery.api.StudentApi;
 import org.openapitools.studentdeanery.model.StudentDto;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -19,13 +20,16 @@ import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Service
-@AllArgsConstructor
 @Slf4j
 public class StudentServiceImpl implements StudentApi {
-    private final String topicName = "message-topic";
-
     private final KafkaTemplate<String, StudentDto> kafkaTemplate;
     private final List<StudentDto> message = new CopyOnWriteArrayList<>();
+    private final String topicName;
+
+    public StudentServiceImpl(@Value("${app.kafka.kafkaMessageTopic}")String topicName, KafkaTemplate<String, StudentDto> kafkaTemplate) {
+        this.topicName = topicName;
+        this.kafkaTemplate = kafkaTemplate;
+    }
 
     @Override
     public ResponseEntity<List<StudentDto>> findAll() {
@@ -42,6 +46,7 @@ public class StudentServiceImpl implements StudentApi {
                 .findFirst()
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+
     }
 
 

@@ -1,7 +1,7 @@
 package org.elvira.studentdeanury.client.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.elvira.studentdeanury.client.service.StudentServiceImpl;
+import org.openapitools.studentdeanery.api.StudentApi;
 import org.openapitools.studentdeanery.model.StudentDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StudentController {
 
-    private final StudentServiceImpl studentService;
+    private final StudentApi studentService;
 
     @GetMapping
     public ResponseEntity<List<StudentDto>> findAll() {

@@ -63,7 +63,7 @@ public class KafkaConfiguration {
         return new KafkaTemplate<>(kafkaProducer);
     }
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, StudentResponse> kafkaMessageConcurrentKafkaListenerContainerFactory(
+    public ConcurrentKafkaListenerContainerFactory<String, StudentResponse> studentStatusServiceConcurrentKafkaListenerContainerFactory(
             ConsumerFactory<String, StudentResponse> kafkaMessageConsumerFactory) {
         ConcurrentKafkaListenerContainerFactory<String, StudentResponse> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(kafkaMessageConsumerFactory);

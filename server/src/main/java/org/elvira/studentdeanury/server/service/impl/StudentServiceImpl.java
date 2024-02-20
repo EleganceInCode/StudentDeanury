@@ -84,6 +84,7 @@ public class StudentServiceImpl implements StudentService {
                 .setAge(student.getAge())
                 .setFirstName(student.getFirstName())
                 .setMiddleName(student.getMiddleName())
+                .setLastName(student.getLastName())
                 .setSubjectResponses(buildSubjectResponses(student.getSubjectDao()));
     }
 
