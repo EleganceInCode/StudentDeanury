@@ -1,6 +1,5 @@
-package org.elvira.studentdeanury;
+package org.elvira.studentdeanury.client;
 
-import org.elvira.studentdeanury.client.StudentDeaneryApplication;
 import org.junit.jupiter.api.Test;
 import org.openapitools.studentdeanery.api.StudentApi;
 import org.springframework.beans.factory.annotation.Autowired;

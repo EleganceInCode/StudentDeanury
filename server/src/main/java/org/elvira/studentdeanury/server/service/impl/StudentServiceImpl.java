@@ -17,10 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Optional.ofNullable;
@@ -37,7 +34,8 @@ public class StudentServiceImpl implements StudentService {
     @Transactional(readOnly = true)
     public @NonNull List<StudentResponse> findAll() {
         log.info("Список всех студентов");
-        return studentRepository.findAll()
+        return Objects.requireNonNull(studentRepository)
+                .findAll()
                 .stream()
                 .map(this::buildStudentResponse)
                 .collect(Collectors.toList());
@@ -47,7 +45,8 @@ public class StudentServiceImpl implements StudentService {
     @Transactional(readOnly = true)
     public StudentResponse findById(@NonNull Long studentId) {
         log.info("Данные студента под ID: " + studentId);
-        return studentRepository.findById(studentId)
+        return Objects.requireNonNull(studentRepository)
+                .findById(studentId)
                 .map(this::buildStudentResponse)
                 .orElseThrow(() -> new EntityNotFoundException("Cтудент  " + studentId + " не найден"));
     }
@@ -55,16 +54,19 @@ public class StudentServiceImpl implements StudentService {
     @Override
     @Transactional
     public @NonNull StudentResponse createStudent(@NonNull CreateStudentRequest request) {
-        log.info("Студент успешно создан");
+        log.info("Начало создания студента: {}", request);
         StudentDao student = buildStudentRequest(request);
-        return buildStudentResponse(studentRepository.save(student));
+        StudentResponse studentResponse = buildStudentResponse(Objects.requireNonNull(studentRepository).save(student));
+        log.info("Студент успешно создан: {}", studentResponse);
+        return studentResponse;
     }
 
     @Override
     @Transactional
     public @NonNull StudentResponse update(@NonNull Long studentId, @NonNull CreateStudentRequest request) {
         log.info("Данные студента обновлены под ID: " + studentId);
-        StudentDao student = studentRepository.findById(studentId)
+        StudentDao student = Objects.requireNonNull(studentRepository)
+                .findById(studentId)
                 .orElseThrow(() -> new EntityNotFoundException("Студент " + studentId + " не найден"));
         studentUpdate(student, request);
         return buildStudentResponse(studentRepository.save(student));
@@ -74,7 +76,8 @@ public class StudentServiceImpl implements StudentService {
     @Transactional
     public void delete(@NonNull Long studentId) {
         log.info("Студент удален под id: " + studentId);
-        studentRepository.deleteById(studentId);
+        Objects.requireNonNull(studentRepository)
+                .deleteById(studentId);
     }
 
     @NonNull
@@ -104,8 +107,10 @@ public class StudentServiceImpl implements StudentService {
     @NonNull
     private StudentDao buildStudentRequest(CreateStudentRequest request) {
         Set<SubjectDao> subjects = new HashSet<>();
-        if (request.getSubject() != null) {
-            subjects.add(new SubjectDao().setName(request.getSubject().getName()));
+        if (request.getSubjects() != null && !request.getSubjects().isEmpty()) {
+            for(CreateSubjectRequest subjectRequest : request.getSubjects()) {
+                subjects.add(new SubjectDao().setName(subjectRequest.getName()));
+            }
         }
 
         return new StudentDao()
@@ -124,11 +129,13 @@ public class StudentServiceImpl implements StudentService {
         ofNullable(request.getLastName()).map(student::setLastName);
         ofNullable(request.getAge()).map(student::setAge);
 
-        CreateSubjectRequest subjectRequest = request.getSubject();
-        if (subjectRequest != null) {
+
+        Set<CreateSubjectRequest> subjectRequests = request.getSubjects();
+        if (subjectRequests != null) {
             Set<SubjectDao> subjects = new HashSet<>();
-            subjects.add(new SubjectDao().setName(subjectRequest.getName()));
-            student.setSubjectDao(subjects);
+            for (CreateSubjectRequest subjectRequest: subjectRequests ) {
+                subjects.add((new SubjectDao().setName(subjectRequest.getName())));
+            }
         }
     }
 }

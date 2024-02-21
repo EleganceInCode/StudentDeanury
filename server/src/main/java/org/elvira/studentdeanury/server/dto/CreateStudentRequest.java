@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -18,6 +20,6 @@ public class CreateStudentRequest {
     private String middleName;
     private String lastName;
     private Integer age;
-    private CreateSubjectRequest subject;
+    private Set<CreateSubjectRequest> subjects;
 
 }

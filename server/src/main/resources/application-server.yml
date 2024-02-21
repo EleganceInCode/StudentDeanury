@@ -5,3 +5,7 @@ spring:
     serialization:
       write-dates-as-timestamps: false
 
+logging:
+  level:
+    org: DEBUG
+

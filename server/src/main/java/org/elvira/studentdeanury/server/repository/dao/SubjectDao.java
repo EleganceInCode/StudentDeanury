@@ -2,7 +2,6 @@ package org.elvira.studentdeanury.server.repository.dao;
 
 import lombok.*;
 import lombok.experimental.Accessors;
-import org.elvira.studentdeanury.server.dto.StudentResponse;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -46,16 +45,17 @@ public class SubjectDao {
         return Objects.hash(name);
     }
 
-    public void setStudents(Set<StudentResponse> studentResponses) {
+
+    public void setStudents(Set<StudentDao> studentDaos) {
         Set<StudentDao> students = new HashSet<>();
 
-        for (StudentResponse studentResponse : studentResponses) {
-            StudentDao student = new StudentDao();
-            student.setLogin(studentResponse.getLogin());
-            student.setFirstName(studentResponse.getFirstName());
-            student.setMiddleName(studentResponse.getMiddleName());
-            student.setLastName(studentResponse.getLastName());
-            student.setAge(studentResponse.getAge());
+        for (StudentDao student : studentDaos) {
+            StudentDao studentDao = new StudentDao();
+            studentDao.setLogin(student.getLogin());
+            studentDao.setFirstName(student.getFirstName());
+            studentDao.setMiddleName(student.getMiddleName());
+            studentDao.setLastName(student.getLastName());
+            studentDao.setAge(student.getAge());
 
             students.add(student);
         }

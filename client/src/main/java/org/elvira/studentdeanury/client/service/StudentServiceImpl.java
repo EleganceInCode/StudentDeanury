@@ -1,9 +1,7 @@
 package org.elvira.studentdeanury.client.service;
 
-import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-
 
 import org.openapitools.studentdeanery.api.StudentApi;
 import org.openapitools.studentdeanery.model.StudentDto;

@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -16,6 +16,6 @@ import java.util.List;
 public class CreateSubjectRequest {
     private String name;
 
-    private List<Long> students;
+    private Set<Long> students;
 
 }

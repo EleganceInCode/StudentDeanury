@@ -1,15 +1,20 @@
-package org.openapitools;
+package org.elvira.studentdeanury.server;
 
 import org.elvira.studentdeanury.server.dto.CreateStudentRequest;
+import org.elvira.studentdeanury.server.dto.CreateSubjectRequest;
 import org.elvira.studentdeanury.server.dto.StudentResponse;
 import org.elvira.studentdeanury.server.repository.StudentRepository;
 import org.elvira.studentdeanury.server.repository.dao.StudentDao;
+import org.elvira.studentdeanury.server.repository.dao.SubjectDao;
 import org.elvira.studentdeanury.server.service.impl.StudentServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -29,19 +34,34 @@ public class StudentServiceImplTest {
     }
 
     @Test void testCreateStudent() {
+        CreateSubjectRequest math = new CreateSubjectRequest().setName("Математика");
+        CreateSubjectRequest physics = new CreateSubjectRequest().setName("Физика");
+        CreateSubjectRequest programming = new CreateSubjectRequest().setName("Программирование");
+
+        Set<CreateSubjectRequest> subjects = Set.of(math,physics,programming);
+
         CreateStudentRequest request = new CreateStudentRequest()
                 .setLogin("testLogin")
                 .setFirstName("Test")
                 .setMiddleName("User")
                 .setLastName("Testovich")
-                .setAge(20);
+                .setAge(20)
+                .setSubjects(subjects);
+
+        Set<SubjectDao> subjectDaos = subjects.stream()
+                .map(subjectRequest -> new SubjectDao().setName(subjectRequest.getName()))
+                .collect(Collectors.toSet());
+
 
         StudentDao studentDao = new StudentDao()
                 .setLogin(request.getLogin())
                 .setFirstName(request.getFirstName())
                 .setMiddleName(request.getMiddleName())
                 .setLastName(request.getLastName())
-                .setAge(request.getAge());
+                .setAge(request.getAge())
+                        .setSubjectDao(subjectDaos);
+
+
 
         when(studentRepository.save(any(StudentDao.class))).thenReturn(studentDao);
 
@@ -53,6 +73,7 @@ public class StudentServiceImplTest {
         assertThat(createStudent.getMiddleName()).isEqualTo(request.getMiddleName());
         assertThat(createStudent.getLastName()).isEqualTo(request.getLastName());
         assertThat(createStudent.getAge()).isEqualTo(request.getAge());
+        assertThat(createStudent.getSubjectResponses().size()).isEqualTo(subjects.size());
 
         verify(studentRepository,times(1)).save(any(StudentDao.class));
     }
