@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 import org.openapitools.studentdeanery.api.StudentApi;
+import org.openapitools.studentdeanery.model.CreateStudentResponse;
 import org.openapitools.studentdeanery.model.StudentDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +20,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 @Service
 @Slf4j
-public class StudentServiceImpl implements StudentApi {
+public class StudentServiceImpl {
     private final KafkaTemplate<String, StudentDto> kafkaTemplate;
-    private final List<StudentDto> message = new CopyOnWriteArrayList<>();
     private final String topicName;
 
     public StudentServiceImpl(@Value("${app.kafka.kafkaMessageTopic}")String topicName, KafkaTemplate<String, StudentDto> kafkaTemplate) {
@@ -65,13 +65,16 @@ public class StudentServiceImpl implements StudentApi {
     }
 
 
-    @Override
-    public ResponseEntity<List<StudentDto>> create(@NonNull StudentDto student) {
-        log.info("createStudent method called");
-        message.add(student);
+//    @Override
+    public CreateStudentResponse create(@NonNull StudentDto student) {
+        log.debug("createStudent method called");
+//        message.add(student);
         kafkaTemplate.send(topicName, student);
+        log.info("message sent.......");
+//        message.add(student);
 
-        return ResponseEntity.ok(Collections.singletonList(student));
+//
+        return new CreateStudentResponse().message("123123123123123123");
     }
 
 //    @Override

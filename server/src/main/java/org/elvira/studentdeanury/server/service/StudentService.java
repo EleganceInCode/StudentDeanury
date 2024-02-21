@@ -6,7 +6,7 @@ import org.elvira.studentdeanury.server.dto.StudentResponse;
 
 import java.util.List;
 
-public interface StudentService {
+public interface StudentService {// удалить интерфейсы с единственной реализацией
 
     @NonNull
     List<StudentResponse> findAll();

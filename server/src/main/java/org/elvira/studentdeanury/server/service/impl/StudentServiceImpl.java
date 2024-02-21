@@ -54,11 +54,17 @@ public class StudentServiceImpl implements StudentService {
     @Override
     @Transactional
     public @NonNull StudentResponse createStudent(@NonNull CreateStudentRequest request) {
-        log.info("Начало создания студента: {}", request);
-        StudentDao student = buildStudentRequest(request);
-        StudentResponse studentResponse = buildStudentResponse(Objects.requireNonNull(studentRepository).save(student));
-        log.info("Студент успешно создан: {}", studentResponse);
-        return studentResponse;
+
+        // 1. Сохраняем студента в БД
+        // 2. Перед сохранением студента, сохраняем предметы
+        // 3. Если предмет в БД уже есть, НЕ падаем с ошибкой. Считаем что это ок
+        // 4. Если предмета нет, очевидно сохраняем
+
+//        log.info("Начало создания студента: {}", request);
+//        StudentDao student = buildStudentRequest(request);
+//        StudentResponse studentResponse = buildStudentResponse(Objects.requireNonNull(studentRepository).save(student));
+//        log.info("Студент успешно создан: {}", studentResponse);
+//        return studentResponse;
     }
 
     @Override

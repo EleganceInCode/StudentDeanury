@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Accessors(chain = true)
 @Entity
 @Table(name = "students")
-public class StudentDao {
+public class StudentDao {// todo убарить DAO. оставить StudentModel или StudentEntity
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +26,7 @@ public class StudentDao {
 
     @Column(name = "login",nullable = false, unique = true)
     private String login;
-
+// todo убрать тройной перенос строк. Ctrl+Shift+F
 
     private String firstName;
 
@@ -39,7 +39,7 @@ public class StudentDao {
 
     private Integer age;
 
-    @Getter
+    @Getter// todo лишний геттер
     @ManyToMany
     @JoinTable(
             name = "student_subject",

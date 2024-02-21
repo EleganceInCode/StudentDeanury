@@ -47,6 +47,9 @@ public class KafkaConfiguration {
 
         return factory;
     }
+
+    //todo удалить кафка продьюсера. должен остаться только конфигурация kafka listener
+
     @Bean
     public ProducerFactory<String, StudentResponse> kafkaProducer(ObjectMapper objectMapper) {
         Map<String, Object> config = new HashMap<>();

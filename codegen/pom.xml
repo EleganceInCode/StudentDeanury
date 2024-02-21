@@ -38,6 +38,7 @@
                             <configOptions>
                                 <sourceFolder>src/gen/java/main</sourceFolder>
                             </configOptions>
+<!--                            todo fix package name -->
                             <modelPackage>org.openapitools.studentdeanery.model</modelPackage>
                             <apiPackage>org.openapitools.studentdeanery.api</apiPackage>
                         </configuration>
