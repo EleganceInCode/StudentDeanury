@@ -2,6 +2,7 @@ package org.elvira.studentdeanury.server.repository.dao;
 
 import lombok.*;
 import lombok.experimental.Accessors;
+import org.elvira.studentdeanury.codogen.model.SubjectDto;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -16,13 +17,14 @@ import java.util.Set;
 @Accessors(chain = true)
 @Entity
 @Table(name = "subjects")
-public class SubjectDao {
+public class SubjectModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    @Column(name = "subject_name")
+    private String subjectName;
 
     @ManyToMany
     @JoinTable(
@@ -30,37 +32,25 @@ public class SubjectDao {
             joinColumns = @JoinColumn(name = "subject_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
-    private Set<StudentDao> students = new HashSet<>();
+    private Set<StudentModel> students = new HashSet<>();
+
+    public SubjectModel convertToSubjectModel(SubjectDto subjectDto) {
+        SubjectModel subjectModel = new SubjectModel();
+        subjectModel.setSubjectName(subjectDto.getSubjectName());
+        return subjectModel;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SubjectDao subjectDao = (SubjectDao) o;
-        return name.equals(subjectDao.name);
+        SubjectModel subjectDao = (SubjectModel) o;
+        return subjectName.equals(subjectDao.subjectName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(subjectName);
     }
 
-
-    public void setStudents(Set<StudentDao> studentDaos) {
-        Set<StudentDao> students = new HashSet<>();
-
-        for (StudentDao student : studentDaos) {
-            StudentDao studentDao = new StudentDao();
-            studentDao.setLogin(student.getLogin());
-            studentDao.setFirstName(student.getFirstName());
-            studentDao.setMiddleName(student.getMiddleName());
-            studentDao.setLastName(student.getLastName());
-            studentDao.setAge(student.getAge());
-
-            students.add(student);
-        }
-
-        this.students = students;
-
-    }
 }

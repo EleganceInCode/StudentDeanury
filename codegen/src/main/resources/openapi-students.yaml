@@ -18,7 +18,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StudentsDto'
+                type: array
+                items:
+                  $ref: '#/components/schemas/StudentDto'
         '400':
           description: Неверное значение статуса
         'default':
@@ -65,8 +67,8 @@ paths:
           required: true
           description: Идентификатор студента
           schema:
-            type: integer
-            format: int64
+            type: string
+            format: uuid
       responses:
         '200':
           description: Успешный ответ с одним студентом
@@ -93,8 +95,8 @@ paths:
           required: true
           description: Идентификатор студента
           schema:
-            type: integer
-            format: int64
+            type: string
+            format: uuid
       responses:
         '200':
           description: Успешное удаление
@@ -120,7 +122,6 @@ components:
         - age
       properties:
         id:
-#          todo все айдишники должны быть UUID
           type: string
           format: uuid
           example: 01d3ff0d-cc37-4863-adef-72d3b0dbf08a
@@ -143,7 +144,25 @@ components:
         subjects:
           type: array
           items:
-            type: string
+            $ref: '#/components/schemas/SubjectDto'
+          uniqueItems: true
+    SubjectDto:
+      type: object
+      required:
+        - subjectId
+        - subjectName
+      properties:
+        subjectId:
+          type: string
+          format: uuid
+          example: '123e4567-e89b-12d3-a456-426614174000'
+        subjectName:
+          type: string
+          example: Mathematics
+        students:
+          type: array
+          items:
+            $ref: '#/components/schemas/StudentDto'
     Error:
       type: object
       properties:

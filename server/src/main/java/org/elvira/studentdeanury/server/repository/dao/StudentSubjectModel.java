@@ -11,16 +11,16 @@ import javax.persistence.*;
 @Accessors(chain = true)
 @Entity
 @Table(name = "student_subject")
-public class StudentSubjectDao {
+public class StudentSubjectModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "student_id")
-    private StudentDao student;
+    private StudentModel student;
 
     @ManyToOne
     @JoinColumn(name = "subject_id")
-    private SubjectDao subjectDao;
+    private SubjectModel subjectDao;
 }

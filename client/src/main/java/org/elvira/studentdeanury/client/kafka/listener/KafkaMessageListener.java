@@ -3,7 +3,7 @@ package org.elvira.studentdeanury.client.kafka.listener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.openapitools.studentdeanery.model.StudentDto;
+import org.elvira.studentdeanury.codogen.model.StudentDto;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;

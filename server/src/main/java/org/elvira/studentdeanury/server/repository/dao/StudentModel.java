@@ -18,8 +18,7 @@ import java.util.stream.Collectors;
 @Accessors(chain = true)
 @Entity
 @Table(name = "students")
-public class StudentDao {// todo убарить DAO. оставить StudentModel или StudentEntity
-
+public class StudentModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -39,16 +38,15 @@ public class StudentDao {// todo убарить DAO. оставить StudentMod
 
     private Integer age;
 
-    @Getter// todo лишний геттер
     @ManyToMany
     @JoinTable(
             name = "student_subject",
             joinColumns = @JoinColumn(name = "student_id"),
             inverseJoinColumns = @JoinColumn(name = "subject_id")
     )
-    private Set<SubjectDao> subjectDao = new HashSet<>();
+    private Set<SubjectModel> subjectDao = new HashSet<>();
 
-    public void addSubject(SubjectDao subjectDao) {
+    public void addSubject(SubjectModel subjectDao) {
         this.subjectDao.add(subjectDao);
     }
 
@@ -59,7 +57,7 @@ public class StudentDao {// todo убарить DAO. оставить StudentMod
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        StudentDao student = (StudentDao) o;
+        StudentModel student = (StudentModel) o;
         return login.equals(student.login);
     }
 

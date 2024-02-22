@@ -1,44 +1,49 @@
 package org.elvira.studentdeanury.client.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.elvira.studentdeanury.client.service.StudentServiceImpl;
-import org.openapitools.studentdeanery.api.StudentApi;
-import org.openapitools.studentdeanery.model.CreateStudentResponse;
-import org.openapitools.studentdeanery.model.StudentDto;
+import org.elvira.studentdeanury.client.service.StudentService;
+
+import org.elvira.studentdeanury.codogen.api.StudentApi;
+import org.elvira.studentdeanury.codogen.model.CreateStudentResponse;
+import org.elvira.studentdeanury.codogen.model.StudentDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.NativeWebRequest;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/students")
 @RequiredArgsConstructor
 public class StudentController implements StudentApi {
 
-    private final StudentServiceImpl studentService;
+    private final StudentService studentService;
 
-    @GetMapping
-    public ResponseEntity<List<StudentDto>> findAll() {
-        return studentService.findAll();
+    @Override
+    public Optional<NativeWebRequest> getRequest() {
+        return StudentApi.super.getRequest();
     }
-
-//    @PostMapping
-//    public ResponseEntity<List<StudentDto>> create(@RequestBody StudentDto studentDto) {
-//        return studentService.create(studentDto);
-//    }
 
     @Override
     public ResponseEntity<CreateStudentResponse> create(StudentDto studentDto) {
-        return ResponseEntity.ok( studentService.create(studentDto);
+        studentService.create(studentDto);
+        return ResponseEntity.ok(new CreateStudentResponse().message("Message sent to kafka"));
     }
 
-    @GetMapping("/{studentId}")
-    public ResponseEntity<StudentDto> findById(@PathVariable Long studentId) {
-        return studentService.findById(studentId);
+    @Override
+    public ResponseEntity<Void> delete(UUID studentId) {
+        return StudentApi.super.delete(studentId);
     }
 
-    @DeleteMapping("/{studentId}")
-    public ResponseEntity<Void> delete(@PathVariable Long studentId) {
-        return studentService.delete(studentId);
+    @Override
+    public ResponseEntity<List<StudentDto>> findAll() {
+        return StudentApi.super.findAll();
+    }
+
+    @Override
+    public ResponseEntity<StudentDto> findById(UUID studentId) {
+        return StudentApi.super.findById(studentId);
     }
 }
