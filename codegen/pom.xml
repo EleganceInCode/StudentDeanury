@@ -39,8 +39,8 @@
                                 <sourceFolder>src/gen/java/main</sourceFolder>
                             </configOptions>
 <!--                            todo fix package name -->
-                            <modelPackage>org.elvira.studentdeanury.codogen.model</modelPackage>
-                            <apiPackage>org.elvira.studentdeanury.codogen.api</apiPackage>
+                            <modelPackage>org.elvira.studentdeanury.codegen.model</modelPackage>
+                            <apiPackage>org.elvira.studentdeanury.codegen.api</apiPackage>
                         </configuration>
                     </execution>
                 </executions>
