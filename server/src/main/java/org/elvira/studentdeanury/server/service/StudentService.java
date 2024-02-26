@@ -36,7 +36,7 @@ public class StudentService {
         if (studentDto.getSubjects() != null) {
             for (SubjectDto subjectDto : studentDto.getSubjects()) {
                 SubjectModel subjectModel = subjectRepository.findBySubjectName(subjectDto.getSubjectName()).orElse(null);
-                if (subjectModel == null) {
+                if (subjectModel == null) {// todo не надо писать orElse(null). возвращаешь optional и тут проверяешь Optional.ifPresent
                     subjectModel = new SubjectModel().convertToSubjectModel(subjectDto);
                     subjectRepository.save(subjectModel);
                 }
@@ -44,10 +44,10 @@ public class StudentService {
         }
 
         StudentModel student = buildStudentRequest(studentDto);
-        StudentDto studentResponse = buildStudentResponse(Objects.requireNonNull(studentRepository).save(student));
+        StudentDto studentResponse = buildStudentResponse(Objects.requireNonNull(studentRepository).save(student));// todo зачем нужен Objects.requireNonNull? убрать
         log.info("Студент успешно создан: {}", studentResponse);
     }
-
+// todo не надо публичным делать такие методы
     public static SubjectDto converToSubjectDto(SubjectModel subjectModel) {
         SubjectDto subjectDto = new SubjectDto();
         subjectDto.setSubjectName(subjectModel.getSubjectName());
@@ -83,14 +83,14 @@ public class StudentService {
                 .setLastName(studentDto.getLastName())
                 .setAge(studentDto.getAge());
 
-        Set<SubjectDto> subjectsDto = student.getSubjectDao().stream()
+        Set<SubjectDto> subjectsDto = student.getSubjectDao().stream()// todo тут список будет пустой, перепутала видимо. в модель студента добавляешь модели предметов, а не в дто
                 .map(StudentService::converToSubjectDto)
                 .collect(Collectors.toSet());
         studentDto.setSubjects(subjectsDto);
 
         if (studentDto.getSubjects() != null) {
             Set<SubjectModel> subjects = studentDto.getSubjects().stream()
-                    .map(dto -> Objects.requireNonNull(subjectRepository).findBySubjectName(dto.getSubjectName()))
+                    .map(dto -> Objects.requireNonNull(subjectRepository).findBySubjectName(dto.getSubjectName()))// todo зачем нужен Objects.requireNonNull? убрать
                     .filter(Optional::isPresent)
                     .map(Optional::get)
                     .collect(Collectors.toSet());
@@ -99,6 +99,7 @@ public class StudentService {
         return student;
     }
 }
+// todo комментарии пора убрать
 
 //    private void studentUpdate(StudentModel student, StudentDto studentDto) {
 //        ofNullable(studentDto.getLogin()).map(student::setLogin);

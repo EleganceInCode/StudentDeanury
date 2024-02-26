@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Accessors(chain = true)
 @Entity
 @Table(name = "student_subject")
-public class StudentSubjectModel {
+public class StudentSubjectModel {// todo этот класс нигде не используется. удалить
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

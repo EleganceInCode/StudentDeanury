@@ -17,11 +17,11 @@ import java.util.stream.Collectors;
 @ToString
 @Accessors(chain = true)
 @Entity
-@Table(name = "students")
+@Table(name = "students")// todo имена таблиц в единственном числе пишем
 public class StudentModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id;// todo поменяй на UUID. в ДТО у тебя же UUID. не проверяла видимо. и в предмете тоже
 
     @Column(name = "login",nullable = false, unique = true)
     private String login;
@@ -44,7 +44,7 @@ public class StudentModel {
             joinColumns = @JoinColumn(name = "student_id"),
             inverseJoinColumns = @JoinColumn(name = "subject_id")
     )
-    private Set<SubjectModel> subjectDao = new HashSet<>();
+    private Set<SubjectModel> subjectDao = new HashSet<>();// todo не дао
 
     public void addSubject(SubjectModel subjectDao) {
         this.subjectDao.add(subjectDao);
