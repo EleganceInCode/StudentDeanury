@@ -12,7 +12,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
-@SpringBootTest(classes = StudentDeaneryApplication.class)
+@SpringBootTest(classes = StudentClientDeaneryApplication.class)
 @Testcontainers
 public class KafkaMessageListenerTest {
 

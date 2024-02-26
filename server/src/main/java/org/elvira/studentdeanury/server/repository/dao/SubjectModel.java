@@ -2,7 +2,7 @@ package org.elvira.studentdeanury.server.repository.dao;
 
 import lombok.*;
 import lombok.experimental.Accessors;
-import org.elvira.studentdeanury.codogen.model.SubjectDto;
+import org.elvira.studentdeanury.codegen.model.SubjectDto;
 
 import javax.persistence.*;
 import java.util.HashSet;

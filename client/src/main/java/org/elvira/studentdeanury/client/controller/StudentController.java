@@ -3,9 +3,9 @@ package org.elvira.studentdeanury.client.controller;
 import lombok.RequiredArgsConstructor;
 import org.elvira.studentdeanury.client.service.StudentService;
 
-import org.elvira.studentdeanury.codogen.api.StudentApi;
-import org.elvira.studentdeanury.codogen.model.CreateStudentResponse;
-import org.elvira.studentdeanury.codogen.model.StudentDto;
+import org.elvira.studentdeanury.codegen.api.StudentApi;
+import org.elvira.studentdeanury.codegen.model.CreateStudentResponse;
+import org.elvira.studentdeanury.codegen.model.StudentDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -29,12 +29,15 @@ public class StudentController implements StudentApi {
     @Override
     public ResponseEntity<CreateStudentResponse> create(StudentDto studentDto) {
         studentService.create(studentDto);
-        return ResponseEntity.ok(new CreateStudentResponse().message("Message sent to kafka"));
+        return ResponseEntity.ok().body(new CreateStudentResponse().message("Сообщение улетело в кафку"));
     }
 
     @Override
     public ResponseEntity<Void> delete(UUID studentId) {
-        return StudentApi.super.delete(studentId);
+        StudentDto studentToDelete = new StudentDto();
+        studentToDelete.setId(studentId);
+        studentService.delete(studentToDelete);
+        return ResponseEntity.ok().build();
     }
 
     @Override

@@ -149,7 +149,6 @@ components:
     SubjectDto:
       type: object
       required:
-        - subjectId
         - subjectName
       properties:
         subjectId:
@@ -159,10 +158,6 @@ components:
         subjectName:
           type: string
           example: Mathematics
-        students:
-          type: array
-          items:
-            $ref: '#/components/schemas/StudentDto'
     Error:
       type: object
       properties:

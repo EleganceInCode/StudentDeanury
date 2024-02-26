@@ -5,7 +5,7 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
-import org.elvira.studentdeanury.codogen.model.StudentDto;
+import org.elvira.studentdeanury.codegen.model.StudentDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,9 +23,6 @@ public class KafkaConfiguration {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
-    @Value("${app.kafka.kafkaMessageGroupId}")
-    private String kafkaMessageGroupId;
-
     @Bean
     public ProducerFactory<String, StudentDto> kafkaProducer(ObjectMapper objectMapper) {
         Map<String, Object> config = new HashMap<>();
@@ -36,29 +33,10 @@ public class KafkaConfiguration {
 
         return new DefaultKafkaProducerFactory<>(config, new StringSerializer(), new JsonSerializer<>(objectMapper));
     }
-    @Bean
-    public ConsumerFactory<String, StudentDto> kafkaMessageConsumerFactory(ObjectMapper objectMapper) {
-        Map<String, Object> config = new HashMap<>();
-
-        config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        config.put(ConsumerConfig.GROUP_ID_CONFIG, kafkaMessageGroupId);
-        config.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
-
-        return new DefaultKafkaConsumerFactory<>(config, new StringDeserializer(), new JsonDeserializer<>(objectMapper));
-    }
 
     @Bean
     public KafkaTemplate<String,StudentDto> kafkaTemplate(ProducerFactory<String,StudentDto> kafkaProducer) {
         return new KafkaTemplate<>(kafkaProducer);
     }
-    @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, StudentDto> studentStatusServiceConcurrentKafkaListenerContainerFactory(
-            ConsumerFactory<String, StudentDto> kafkaMessageConsumerFactory) {
-        ConcurrentKafkaListenerContainerFactory<String, StudentDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(kafkaMessageConsumerFactory);
 
-        return factory;
-    }
 }

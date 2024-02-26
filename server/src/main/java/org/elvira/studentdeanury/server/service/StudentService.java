@@ -1,11 +1,11 @@
 package org.elvira.studentdeanury.server.service;
 
-import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.elvira.studentdeanury.codogen.model.StudentDto;
-import org.elvira.studentdeanury.codogen.model.SubjectDto;
+import org.elvira.studentdeanury.codegen.model.StudentDto;
+import org.elvira.studentdeanury.codegen.model.SubjectDto;
 import org.elvira.studentdeanury.server.repository.StudentRepository;
 import org.elvira.studentdeanury.server.repository.SubjectRepository;
 import org.elvira.studentdeanury.server.repository.dao.StudentModel;
@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-@NoArgsConstructor(force = true)
 public class StudentService {
 
     private final StudentRepository studentRepository;
@@ -31,18 +30,12 @@ public class StudentService {
     private final SubjectRepository subjectRepository;
 
     @Transactional
-    public @NonNull StudentDto createStudent(@NonNull StudentDto studentDto) {
-
-        // 1. Сохраняем студента в БД
-        // 2. Перед сохранением студента, сохраняем предметы
-        // 3. Если предмет в БД уже есть, НЕ падаем с ошибкой. Считаем что это ок
-        // 4. Если предмета нет, очевидно сохраняем
-
+    public void createStudent(@NonNull StudentDto studentDto) {
         log.info("Начало создания студента: {}", studentDto);
 
         if (studentDto.getSubjects() != null) {
             for (SubjectDto subjectDto : studentDto.getSubjects()) {
-                SubjectModel subjectModel = Objects.requireNonNull(subjectRepository).findBySubjectName(subjectDto.getSubjectName()).orElse(null);
+                SubjectModel subjectModel = subjectRepository.findBySubjectName(subjectDto.getSubjectName()).orElse(null);
                 if (subjectModel == null) {
                     subjectModel = new SubjectModel().convertToSubjectModel(subjectDto);
                     subjectRepository.save(subjectModel);
@@ -53,7 +46,6 @@ public class StudentService {
         StudentModel student = buildStudentRequest(studentDto);
         StudentDto studentResponse = buildStudentResponse(Objects.requireNonNull(studentRepository).save(student));
         log.info("Студент успешно создан: {}", studentResponse);
-        return studentResponse;
     }
 
     public static SubjectDto converToSubjectDto(SubjectModel subjectModel) {
@@ -98,7 +90,7 @@ public class StudentService {
 
         if (studentDto.getSubjects() != null) {
             Set<SubjectModel> subjects = studentDto.getSubjects().stream()
-                    .map(dto -> subjectRepository.findBySubjectName(dto.getSubjectName()))
+                    .map(dto -> Objects.requireNonNull(subjectRepository).findBySubjectName(dto.getSubjectName()))
                     .filter(Optional::isPresent)
                     .map(Optional::get)
                     .collect(Collectors.toSet());

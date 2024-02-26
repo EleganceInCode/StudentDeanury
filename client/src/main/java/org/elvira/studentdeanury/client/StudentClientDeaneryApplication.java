@@ -4,8 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class StudentDeaneryApplication {// todo StudentClientDeaneryApplication
+public class StudentClientDeaneryApplication {
     public static void main(String[] args) {
-        SpringApplication.run(StudentDeaneryApplication.class,args);
+        SpringApplication.run(StudentClientDeaneryApplication.class,args);
     }
 }

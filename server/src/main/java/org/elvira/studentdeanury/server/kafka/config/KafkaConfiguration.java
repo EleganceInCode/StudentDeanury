@@ -3,7 +3,7 @@ package org.elvira.studentdeanury.server.kafka.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.elvira.studentdeanury.codogen.model.CreateStudentResponse;
+import org.elvira.studentdeanury.codegen.model.StudentDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +24,7 @@ public class KafkaConfiguration {
     private String kafkaMessageGroupId;
 
     @Bean
-    public ConsumerFactory<String, CreateStudentResponse> kafkaMessageConsumerFactory(ObjectMapper objectMapper) {
+    public ConsumerFactory<String, StudentDto> kafkaMessageConsumerFactory(ObjectMapper objectMapper) {
         Map<String, Object> config = new HashMap<>();
 
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
@@ -37,18 +37,9 @@ public class KafkaConfiguration {
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, CreateStudentResponse> kafkaListenerContainerFactory(
-            ConsumerFactory<String, CreateStudentResponse> kafkaMessageConsumerFactory) {
-        ConcurrentKafkaListenerContainerFactory<String, CreateStudentResponse> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(kafkaMessageConsumerFactory);
-
-        return factory;
-    }
-
-    @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, CreateStudentResponse> studentStatusServiceConcurrentKafkaListenerContainerFactory(
-            ConsumerFactory<String, CreateStudentResponse> kafkaMessageConsumerFactory) {
-        ConcurrentKafkaListenerContainerFactory<String, CreateStudentResponse> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    public ConcurrentKafkaListenerContainerFactory<String, StudentDto> studentKafkaListenerContainerFactory(
+            ConsumerFactory<String, StudentDto> kafkaMessageConsumerFactory) {
+        ConcurrentKafkaListenerContainerFactory<String, StudentDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(kafkaMessageConsumerFactory);
 
         return factory;
