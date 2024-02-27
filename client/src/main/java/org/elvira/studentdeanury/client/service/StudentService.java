@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class StudentService {
     private final String topicName;
     private final KafkaTemplate<String, StudentDto> kafkaTemplate;
-
+    // верни AllArgsConstructor и положи в корень проекта lombok.config, чтобы @Value прокидывалось
     public StudentService(@Value("${app.kafka.kafkaMessageTopic}")String topicName, KafkaTemplate<String, StudentDto> kafkaTemplate) {
         this.topicName = topicName;
         this.kafkaTemplate = kafkaTemplate;
@@ -38,5 +38,8 @@ public class StudentService {
         log.info("deleteStudent method called");
         sendMessage(student);
     }
-
+// todo чем создание отличается от удаления и изменения? можно передавать тип действия вместе со студентом
+    // создай в кодгене StudentModificationActionDto. в нем будет студент и тип действия (енум: CREATE, UPDATE, DELETE)
+    // передавай его в топик, а на принимающей стороне (на сервере) по типу действия будем понимать что делать
+    // в итоге 24-я строка у тебя будет kafkaTemplate.send(topicName, new StudentModificationActionDto(ActionType.CREATE, student));
 }

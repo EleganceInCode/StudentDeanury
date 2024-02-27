@@ -16,7 +16,7 @@ import java.util.Set;
 @Setter
 @Accessors(chain = true)
 @Entity
-@Table(name = "subjects")
+@Table(name = "subjects")// todo имена таблиц в единственном числе пишем
 public class SubjectModel {
 
     @Id

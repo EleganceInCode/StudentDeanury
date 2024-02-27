@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-public class KafkaConfiguration {
+public class KafkaConfiguration {// todo пакет config лишний, яб убрал
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;

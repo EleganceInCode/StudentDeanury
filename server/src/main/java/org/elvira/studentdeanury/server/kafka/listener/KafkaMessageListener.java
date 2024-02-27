@@ -16,7 +16,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class KafkaMessageListener {
+public class KafkaMessageListener { // todo а это яб перенес в пакет service
 
     private final StudentService studentService;
     @KafkaListener(topics = "${app.kafka.kafkaMessageTopic}",

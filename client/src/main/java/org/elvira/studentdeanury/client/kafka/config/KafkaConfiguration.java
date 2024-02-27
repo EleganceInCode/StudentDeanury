@@ -23,7 +23,7 @@ public class KafkaConfiguration {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
-    @Bean
+    @Bean// надеюсь тут все в порядке. попробуй отправь сообщение в топик и подключись посмотри содержимое. OffsetExplorer вроде программа для этого. и еще плагин для Идеи есть BigDataTools
     public ProducerFactory<String, StudentDto> kafkaProducer(ObjectMapper objectMapper) {
         Map<String, Object> config = new HashMap<>();
 
