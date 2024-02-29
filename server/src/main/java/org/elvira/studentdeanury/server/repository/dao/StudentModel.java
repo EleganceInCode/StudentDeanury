@@ -2,12 +2,13 @@ package org.elvira.studentdeanury.server.repository.dao;
 
 import lombok.*;
 import lombok.experimental.Accessors;
-
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Getter
@@ -17,24 +18,24 @@ import java.util.stream.Collectors;
 @ToString
 @Accessors(chain = true)
 @Entity
-@Table(name = "students")// todo имена таблиц в единственном числе пишем
+@Table(name = "student")// todo имена таблиц в единственном числе пишем
 public class StudentModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;// todo поменяй на UUID. в ДТО у тебя же UUID. не проверяла видимо. и в предмете тоже
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    private UUID id;
 
     @Column(name = "login",nullable = false, unique = true)
     private String login;
-// todo убрать тройной перенос строк. Ctrl+Shift+F
 
     private String firstName;
 
-
     private String middleName;
 
-
     private String lastName;
-
 
     private Integer age;
 
@@ -44,14 +45,14 @@ public class StudentModel {
             joinColumns = @JoinColumn(name = "student_id"),
             inverseJoinColumns = @JoinColumn(name = "subject_id")
     )
-    private Set<SubjectModel> subjectDao = new HashSet<>();// todo не дао
+    private Set<SubjectModel> subjectModels = new HashSet<>();
 
-    public void addSubject(SubjectModel subjectDao) {
-        this.subjectDao.add(subjectDao);
+    public void addSubject(SubjectModel subjectModel) {
+        this.subjectModels.add(subjectModel);
     }
 
-    public void removeSubject(Long subjectId) {
-        subjectDao = subjectDao.stream().filter(o -> !o.getId().equals(subjectId)).collect(Collectors.toSet());
+    public void removeSubject(UUID subjectId) {
+        subjectModels = subjectModels.stream().filter(o -> !o.getId().equals(subjectId)).collect(Collectors.toSet());
     }
     @Override
     public boolean equals(Object o) {

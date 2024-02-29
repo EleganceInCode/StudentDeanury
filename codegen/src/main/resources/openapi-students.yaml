@@ -14,13 +14,11 @@ paths:
       operationId: findAll
       responses:
         '200':
-          description: Успешный ответ со списком студентов
+          description: Успешный ответ на получение списка всех студентов
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/StudentDto'
+                $ref: '#/components/schemas/CreateStudentResponse'
         '400':
           description: Неверное значение статуса
         'default':
@@ -71,11 +69,45 @@ paths:
             format: uuid
       responses:
         '200':
-          description: Успешный ответ с одним студентом
+          description: Успешный ответ получения студента по идентификатору
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StudentDto'
+                $ref: '#/components/schemas/CreateStudentResponse'
+        '400':
+          description: Неверное значение статуса
+        'default':
+          description: Всё нестандартное
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      tags:
+        - students
+      summary: Обновление студента
+      operationId: update
+      parameters:
+        - name: student_id
+          in: path
+          required: true
+          description: Идентификатор студента для обновления
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentDto'
+      responses:
+        '200':
+          description: Успешное обновление студента
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateStudentResponse'
         '400':
           description: Неверное значение статуса
         'default':
@@ -99,9 +131,11 @@ paths:
             format: uuid
       responses:
         '200':
-          description: Успешное удаление
+          description: Успешный ответ об удалении студента
           content:
-            application/json: {}
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateStudentResponse'
         '400':
           description: Неверное значение статуса
         'default':
@@ -158,6 +192,27 @@ components:
         subjectName:
           type: string
           example: Mathematics
+    ActionEnum:
+      type: string
+      enum:
+        - CREATE
+        - UPDATE
+        - DELETE
+        - FIND_ALL
+        - FIND_BY_ID
+    StudentModificationActionDto:
+      type: object
+      required:
+        - studentDto
+        - action
+      properties:
+        studentId:
+          type: string
+          format: uuid
+        studentDto:
+          $ref: '#/components/schemas/StudentDto'
+        action:
+          $ref: '#/components/schemas/ActionEnum'
     Error:
       type: object
       properties:

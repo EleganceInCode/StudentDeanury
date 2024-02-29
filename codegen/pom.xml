@@ -38,7 +38,6 @@
                             <configOptions>
                                 <sourceFolder>src/gen/java/main</sourceFolder>
                             </configOptions>
-<!--                            todo fix package name -->
                             <modelPackage>org.elvira.studentdeanury.codegen.model</modelPackage>
                             <apiPackage>org.elvira.studentdeanury.codegen.api</apiPackage>
                         </configuration>
@@ -48,7 +47,10 @@
         </plugins>
     </build>
     <dependencies>
-<!--        TODO add spring boot starter web-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>

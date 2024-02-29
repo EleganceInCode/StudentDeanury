@@ -2,17 +2,14 @@ package org.elvira.studentdeanury.client.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.elvira.studentdeanury.client.service.StudentService;
-
 import org.elvira.studentdeanury.codegen.api.StudentApi;
 import org.elvira.studentdeanury.codegen.model.CreateStudentResponse;
 import org.elvira.studentdeanury.codegen.model.StudentDto;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*; // todo звездочку нельзя импортить
-import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/students")
@@ -22,31 +19,35 @@ public class StudentController implements StudentApi {
     private final StudentService studentService;
 
     @Override
-    public Optional<NativeWebRequest> getRequest() { // todo и тут что-то странное. зачем этот метод?
-        return StudentApi.super.getRequest();
-    }
-
-    @Override
     public ResponseEntity<CreateStudentResponse> create(StudentDto studentDto) {
         studentService.create(studentDto);
-        return ResponseEntity.ok().body(new CreateStudentResponse().message("Сообщение улетело в кафку")); // todo такой же ответ можно сделать и для удаления и изменения
+        return ResponseEntity.ok().body(new CreateStudentResponse().message("Сообщение улетело в кафку," +
+                " а Dto на сервер для создания студента"));
     }
 
     @Override
-    public ResponseEntity<Void> delete(UUID studentId) {
-        StudentDto studentToDelete = new StudentDto();
-        studentToDelete.setId(studentId);
-        studentService.delete(studentToDelete); // todo ну такооое себе. ну ладно, можно оставить
-        return ResponseEntity.ok().build();
+    public ResponseEntity<CreateStudentResponse> update(UUID studentId, StudentDto studentDto) {
+        studentService.update(studentId, studentDto);
+        return ResponseEntity.ok().body(new CreateStudentResponse().message("Сообщение улетело в кафку для обновления студента"));
     }
 
     @Override
-    public ResponseEntity<List<StudentDto>> findAll() {
-        return StudentApi.super.findAll();
-    } // todo что-то странное
+    public ResponseEntity<CreateStudentResponse> delete(UUID studentId) {
+        studentService.delete(studentId);
+        return ResponseEntity.ok().body(new CreateStudentResponse().message("Сообщение улетело в кафку, " +
+                "а Id на сервер для удаления id: "+ studentId));
+    }
 
     @Override
-    public ResponseEntity<StudentDto> findById(UUID studentId) {
-        return StudentApi.super.findById(studentId);
-    } // todo и тут
+    public ResponseEntity<CreateStudentResponse> findAll() {
+        studentService.findAll();
+        return ResponseEntity.ok().body(new CreateStudentResponse().message("Сообщение улетело в кафку для поиска всех студентов"));
+    }
+
+    @Override
+    public ResponseEntity<CreateStudentResponse> findById(UUID studentId) {
+        studentService.findById(studentId);
+        return ResponseEntity.ok().body(new CreateStudentResponse().message("Сообщение улетело в кафку с id: " +
+                studentId + " для поиска студента по id"));
+    }
 }

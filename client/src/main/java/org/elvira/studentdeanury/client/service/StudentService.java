@@ -1,45 +1,57 @@
 package org.elvira.studentdeanury.client.service;
 
+import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-
+import org.elvira.studentdeanury.codegen.model.ActionEnum;
 import org.elvira.studentdeanury.codegen.model.StudentDto;
+import org.elvira.studentdeanury.codegen.model.StudentModificationActionDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
+@AllArgsConstructor
 @Slf4j
 public class StudentService {
-    private final String topicName;
-    private final KafkaTemplate<String, StudentDto> kafkaTemplate;
-    // верни AllArgsConstructor и положи в корень проекта lombok.config, чтобы @Value прокидывалось
-    public StudentService(@Value("${app.kafka.kafkaMessageTopic}")String topicName, KafkaTemplate<String, StudentDto> kafkaTemplate) {
-        this.topicName = topicName;
-        this.kafkaTemplate = kafkaTemplate;
-    }
 
-    private void sendMessage(StudentDto student) {
-        log.info("Sending message to Kafka topic: {}", topicName);
-        kafkaTemplate.send(topicName,student);
-    }
+    @Value("${app.kafka.kafkaMessageTopic}")
+    private final String topicName;
+    private final KafkaTemplate<String, StudentModificationActionDto> kafkaTemplate;
 
     public void create(@NonNull StudentDto student) {
         log.info("createStudent method called");
-        sendMessage(student);
+        kafkaTemplate.send(topicName, new StudentModificationActionDto(student, ActionEnum.CREATE));
     }
 
-    public void update(@NonNull StudentDto student) {
+    public void update(@NonNull UUID studentId, @NonNull StudentDto student) {
         log.info("updateStudent method called");
-        sendMessage(student);
+        if(studentId.equals(student.getId())) {
+            kafkaTemplate.send(topicName, new StudentModificationActionDto(student, ActionEnum.UPDATE));
+        } else {
+            log.error("Student ID from path and body do not mach");
+            throw new IllegalArgumentException("Student ID from path and body do not mach");
+        }
     }
 
-    public void delete(@NonNull StudentDto student) {
+    public void delete(UUID studentId) {
         log.info("deleteStudent method called");
-        sendMessage(student);
+        StudentDto saveId = new StudentDto();
+        saveId.setId(studentId);
+        kafkaTemplate.send(topicName, new StudentModificationActionDto(saveId, ActionEnum.DELETE));
     }
-// todo чем создание отличается от удаления и изменения? можно передавать тип действия вместе со студентом
-    // создай в кодгене StudentModificationActionDto. в нем будет студент и тип действия (енум: CREATE, UPDATE, DELETE)
-    // передавай его в топик, а на принимающей стороне (на сервере) по типу действия будем понимать что делать
-    // в итоге 24-я строка у тебя будет kafkaTemplate.send(topicName, new StudentModificationActionDto(ActionType.CREATE, student));
+
+    public void findAll() {
+        log.info("findAll method called");
+        kafkaTemplate.send(topicName, new StudentModificationActionDto(new StudentDto(),ActionEnum.FIND_ALL));
+    }
+
+    public void findById(UUID studentId) {
+        log.info("findByIdStudent method called");
+        StudentDto saveId = new StudentDto();
+        saveId.setId(studentId);
+        kafkaTemplate.send(topicName, new StudentModificationActionDto(saveId, ActionEnum.DELETE));
+    }
 }
