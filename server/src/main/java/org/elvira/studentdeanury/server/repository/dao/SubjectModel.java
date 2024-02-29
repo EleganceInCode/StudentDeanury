@@ -23,7 +23,7 @@ public class SubjectModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "subject_name")
+    @Column(name = "subject_name")//todo добавить тогда надо  unique = true) сюда, раз у тебя equals по этому полю.
     private String subjectName;
 
     @ManyToMany

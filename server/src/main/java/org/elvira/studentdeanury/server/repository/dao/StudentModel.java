@@ -47,11 +47,11 @@ public class StudentModel {
     )
     private Set<SubjectModel> subjectModels = new HashSet<>();
 
-    public void addSubject(SubjectModel subjectModel) {
+    public void addSubject(SubjectModel subjectModel) {//todo метод не используется. удалить
         this.subjectModels.add(subjectModel);
     }
 
-    public void removeSubject(UUID subjectId) {
+    public void removeSubject(UUID subjectId) {//todo метод не используется. удалить
         subjectModels = subjectModels.stream().filter(o -> !o.getId().equals(subjectId)).collect(Collectors.toSet());
     }
     @Override

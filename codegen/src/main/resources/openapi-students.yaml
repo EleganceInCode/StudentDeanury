@@ -14,7 +14,7 @@ paths:
       operationId: findAll
       responses:
         '200':
-          description: Успешный ответ на получение списка всех студентов
+          description: Успешный ответ на получение списка всех студентов # вот ты пишешь про список студентов, а в ДТОшке у тебя только 1 студент
           content:
             application/json:
               schema:

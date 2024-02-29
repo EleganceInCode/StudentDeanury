@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
+import java.util.*;//todo опять импорты
 
 @RestController
 @RequestMapping("/students")
@@ -22,7 +22,7 @@ public class StudentController implements StudentApi {
     public ResponseEntity<CreateStudentResponse> create(StudentDto studentDto) {
         studentService.create(studentDto);
         return ResponseEntity.ok().body(new CreateStudentResponse().message("Сообщение улетело в кафку," +
-                " а Dto на сервер для создания студента"));
+                " а Dto на сервер для создания студента"));//todo используй либо multiline string, либо "".formatted()
     }
 
     @Override

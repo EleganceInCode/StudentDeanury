@@ -142,6 +142,7 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
+<!--            todo scope test-->
         </dependency>
     </dependencies>
 </project>

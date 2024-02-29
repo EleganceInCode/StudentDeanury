@@ -29,10 +29,10 @@ public class StudentService {
     public void createStudent(@NonNull StudentDto studentDto) {
         log.info("Начало создания студента: {}", studentDto);
 
-        if (studentDto.getSubjects() != null) {
+        if (studentDto.getSubjects() != null) {//todo в целом этот кусок кода можно вынести в отдельнй приватный метод
             studentDto.getSubjects().forEach(subjectDto ->
                     subjectRepository.findBySubjectName(subjectDto.getSubjectName())
-                            .ifPresentOrElse(subjectModel -> {
+                            .ifPresentOrElse(subjectModel -> { // todo что-то тут не то. почему лямбда пустая? может, вместо ifPresentOrElse() есть более подходящий метод? поищи.
                                     },
                                     () -> {
                                         SubjectModel newSubject = new SubjectModel().convertToSubjectModel(subjectDto);
@@ -43,7 +43,8 @@ public class StudentService {
         }
 
         StudentModel student = buildStudentRequest(studentDto);
-        StudentDto studentResponse = buildStudentResponse(studentRepository.save(student));
+        StudentModel savedStudentModel = studentRepository.save(student);// todo поправил. сохранение в БД важная операция, пусть идет отдельной строкой
+        StudentDto studentResponse = buildStudentResponse(savedStudentModel);
         log.info("Студент успешно создан: {}", studentResponse);
     }
 
@@ -94,7 +95,7 @@ public class StudentService {
     @Transactional
     public void delete(@NonNull UUID studentId) {
         log.info("Студент удален под id: " + studentId);
-        Objects.requireNonNull(studentRepository)
+        Objects.requireNonNull(studentRepository) //todo аж 4 раза Objects.requireNonNull. зачем оно? удалить!
                 .deleteById(studentId);
     }
 
@@ -104,16 +105,16 @@ public class StudentService {
         return subjectDto;
     }
 
-    private SubjectModel convertToSubjectModel(SubjectDto subjectDto) {
-        SubjectModel subjectModel = new SubjectModel();
+    private SubjectModel convertToSubjectModel(SubjectDto subjectDto) { // todo плохое название. вранье! это не конвертация. ты тут как минимум лезешь в БД.
+        SubjectModel subjectModel = new SubjectModel();// todo создание этого объекта тут излишне. присмортись внимательно, ты создаешь объект, сеттишь поле, и потом ничего с ним не делаешь. собственно, первые две строчки метода можно удалить
         subjectModel.setSubjectName(subjectDto.getSubjectName());
         return subjectRepository.findBySubjectName(subjectDto.getSubjectName())
                 .orElseThrow(() -> new EntityNotFoundException("Subject not found: " + subjectDto.getSubjectName()));
     }
 
     @NonNull
-    private StudentDto buildStudentResponse(StudentModel student) {
-
+    private StudentDto buildStudentResponse(StudentModel student) {     //todo и тут название метода плохое
+        //todo зачем пустая строка?
         StudentDto studentDto = new StudentDto();
         studentDto.setLogin(student.getLogin());
         studentDto.setFirstName(student.getFirstName());
@@ -131,8 +132,8 @@ public class StudentService {
         return studentDto;
     }
 
-    @NonNull
-    private StudentModel buildStudentRequest(StudentDto studentDto) {
+    @NonNull//todo да не нужны эти нотналлы
+    private StudentModel buildStudentRequest(StudentDto studentDto) {     //todo название метода плохое. никакого реквеста тут нет
         StudentModel student = new StudentModel()
                 .setLogin(studentDto.getLogin())
                 .setFirstName(studentDto.getFirstName())

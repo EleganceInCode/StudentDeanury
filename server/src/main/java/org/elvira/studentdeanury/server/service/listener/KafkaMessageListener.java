@@ -29,6 +29,7 @@ public class KafkaMessageListener {
             log.info("Received Kafka message: {} , key: {}, " +
                             "topic: {}, partition: {}, timestamp: {} ",
                     student, key, topic, partition, timestamp);
+//           todo replace if with switch
             if (student.getAction().equals(ActionEnum.CREATE)) {
                 studentService.createStudent(student.getStudentDto());
             } else if (student.getAction().equals(ActionEnum.UPDATE)) {
