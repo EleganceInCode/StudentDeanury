@@ -14,7 +14,7 @@ paths:
       operationId: findAll
       responses:
         '200':
-          description: Успешный ответ на получение списка всех студентов
+          description: Успешный ответ на получение списка
           content:
             application/json:
               schema:
@@ -40,7 +40,7 @@ paths:
                 $ref: '#/components/schemas/StudentDto'
       responses:
         '200':
-          description: Успешный ответ создания студента
+          description: Успешный ответ на создание студента
           content:
             application/json:
               schema:
@@ -69,7 +69,7 @@ paths:
             format: uuid
       responses:
         '200':
-          description: Успешный ответ получения студента по идентификатору
+          description: Успешный ответ на получение студента по идентификатору
           content:
             application/json:
               schema:
@@ -103,7 +103,7 @@ paths:
               $ref: '#/components/schemas/StudentDto'
       responses:
         '200':
-          description: Успешное обновление студента
+          description: Успешный ответ на обновление студента
           content:
             application/json:
               schema:
@@ -131,7 +131,7 @@ paths:
             format: uuid
       responses:
         '200':
-          description: Успешный ответ об удалении студента
+          description: Успешный ответ для удаления студента
           content:
             application/json:
               schema:

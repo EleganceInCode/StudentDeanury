@@ -1,6 +1,5 @@
 package org.elvira.studentdeanury.server.service;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.elvira.studentdeanury.codegen.model.StudentDto;
@@ -13,7 +12,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,25 +29,23 @@ public class StudentService {
     private final SubjectRepository subjectRepository;
 
     @Transactional
-    public void createStudent(@NonNull StudentDto studentDto) {
-        log.info("Начало создания студента: {}", studentDto);
+    public void createStudent(StudentDto studentDto) {
+        log.info("Starting to create a student: {}", studentDto);
 
         if (studentDto.getSubjects() != null) {
-            studentDto.getSubjects().forEach(subjectDto ->
-                    subjectRepository.findBySubjectName(subjectDto.getSubjectName())
-                            .ifPresentOrElse(subjectModel -> {
-                                    },
-                                    () -> {
-                                        SubjectModel newSubject = new SubjectModel().convertToSubjectModel(subjectDto);
-                                        subjectRepository.save(newSubject);
-                                    }
-                            )
-            );
+            studentDto.getSubjects().forEach(subjectDto -> {
+                subjectRepository.findBySubjectName(subjectDto.getSubjectName())
+                        .orElseGet(() -> {
+                            SubjectModel newSubject = getExistingSubjectOrThrow(subjectDto);
+                            return subjectRepository.save(newSubject);
+                        });
+            });
         }
 
-        StudentModel student = buildStudentRequest(studentDto);
-        StudentDto studentResponse = buildStudentResponse(studentRepository.save(student));
-        log.info("Студент успешно создан: {}", studentResponse);
+        StudentModel student = mapStudentDtoToModel(studentDto);
+        StudentModel savedStudentModel = studentRepository.save(student);
+        StudentDto studentResponse = mapStudentModelToDto(savedStudentModel);
+        log.info("Student successfully created: {}", studentResponse);
     }
 
     private void studentUpdate(StudentModel student, StudentDto studentDto) {
@@ -56,46 +57,45 @@ public class StudentService {
 
         if (studentDto.getSubjects() != null) {
             Set<SubjectModel> subjects = studentDto.getSubjects().stream()
-                    .map(this::convertToSubjectModel)
+                    .map(this::getExistingSubjectOrThrow)
                     .collect(Collectors.toSet());
             student.setSubjectModels(subjects);
         }
     }
 
     @Transactional(readOnly = true)
-    public @NonNull List<StudentDto> findAll() {
-        log.info("Список всех студентов");
-        return Objects.requireNonNull(studentRepository)
+    public void findAll() {
+        log.info("List of all students");
+        List<StudentDto> collect = studentRepository
                 .findAll()
                 .stream()
-                .map(this::buildStudentResponse)
-                .collect(Collectors.toList());
+                .map(this::mapStudentModelToDto)
+                .toList();
     }
 
     @Transactional(readOnly = true)
-    public StudentDto findById(@NonNull UUID studentId) {
-        log.info("Данные студента под ID: " + studentId);
-        return Objects.requireNonNull(studentRepository)
+    public void findById(UUID studentId) {
+        log.info("Student ID details: {} ", studentId);
+        studentRepository
                 .findById(studentId)
-                .map(this::buildStudentResponse)
-                .orElseThrow(() -> new EntityNotFoundException("Cтудент  " + studentId + " не найден"));
+                .map(this::mapStudentModelToDto)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Student ID: %s not found", studentId)));
     }
 
     @Transactional
-    public @NonNull StudentDto update(@NonNull UUID studentId, @NonNull StudentDto studentDto) {
-        log.info("Данные студента обновлены под ID: " + studentId);
-        StudentModel student = Objects.requireNonNull(studentRepository)
+    public void update(UUID studentId, StudentDto studentDto) {
+        log.info("Start updating student ID: {} ", studentId);
+        StudentModel student = studentRepository
                 .findById(studentId)
-                .orElseThrow(() -> new EntityNotFoundException("Студент " + studentId + " не найден"));
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Student ID: %s not found", studentId)));
         studentUpdate(student, studentDto);
-        return buildStudentResponse(studentRepository.save(student));
+        mapStudentModelToDto(studentRepository.save(student));
     }
 
     @Transactional
-    public void delete(@NonNull UUID studentId) {
-        log.info("Студент удален под id: " + studentId);
-        Objects.requireNonNull(studentRepository)
-                .deleteById(studentId);
+    public void delete(UUID studentId) {
+        log.info("Student removed under ID: {} ", studentId);
+        studentRepository.deleteById(studentId);
     }
 
     private SubjectDto converToSubjectDto(SubjectModel subjectModel) {
@@ -104,16 +104,12 @@ public class StudentService {
         return subjectDto;
     }
 
-    private SubjectModel convertToSubjectModel(SubjectDto subjectDto) {
-        SubjectModel subjectModel = new SubjectModel();
-        subjectModel.setSubjectName(subjectDto.getSubjectName());
+    private SubjectModel getExistingSubjectOrThrow(SubjectDto subjectDto) {
         return subjectRepository.findBySubjectName(subjectDto.getSubjectName())
-                .orElseThrow(() -> new EntityNotFoundException("Subject not found: " + subjectDto.getSubjectName()));
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Subject not found: %s ", subjectDto.getSubjectName())));
     }
 
-    @NonNull
-    private StudentDto buildStudentResponse(StudentModel student) {
-
+    private StudentDto mapStudentModelToDto(StudentModel student) {
         StudentDto studentDto = new StudentDto();
         studentDto.setLogin(student.getLogin());
         studentDto.setFirstName(student.getFirstName());
@@ -131,8 +127,7 @@ public class StudentService {
         return studentDto;
     }
 
-    @NonNull
-    private StudentModel buildStudentRequest(StudentDto studentDto) {
+    private StudentModel mapStudentDtoToModel(StudentDto studentDto) {
         StudentModel student = new StudentModel()
                 .setLogin(studentDto.getLogin())
                 .setFirstName(studentDto.getFirstName())
@@ -142,7 +137,7 @@ public class StudentService {
 
         if (studentDto.getSubjects() != null) {
             Set<SubjectModel> subjects = studentDto.getSubjects().stream()
-                    .map(this::convertToSubjectModel)//
+                    .map(this::getExistingSubjectOrThrow)//
                     .collect(Collectors.toSet());
             student.setSubjectModels(subjects);
         }

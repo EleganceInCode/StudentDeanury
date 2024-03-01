@@ -1,10 +1,21 @@
 package org.elvira.studentdeanury.server.repository.dao;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
-import org.elvira.studentdeanury.codegen.model.SubjectDto;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -23,7 +34,7 @@ public class SubjectModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "subject_name")
+    @Column(name = "subject_name", unique = true)
     private String subjectName;
 
     @ManyToMany
@@ -33,12 +44,6 @@ public class SubjectModel {
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
     private Set<StudentModel> students = new HashSet<>();
-
-    public SubjectModel convertToSubjectModel(SubjectDto subjectDto) {
-        SubjectModel subjectModel = new SubjectModel();
-        subjectModel.setSubjectName(subjectDto.getSubjectName());
-        return subjectModel;
-    }
 
     @Override
     public boolean equals(Object o) {

@@ -2,7 +2,6 @@ package org.elvira.studentdeanury.server.service.listener;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.elvira.studentdeanury.codegen.model.ActionEnum;
 import org.elvira.studentdeanury.codegen.model.StudentModificationActionDto;
 import org.elvira.studentdeanury.server.service.StudentService;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -26,22 +25,18 @@ public class KafkaMessageListener {
                        @Header(KafkaHeaders.RECEIVED_PARTITION) Integer partition,
                        @Header(KafkaHeaders.RECEIVED_TIMESTAMP) Long timestamp) {
         try {
-            log.info("Received Kafka message: {} , key: {}, " +
-                            "topic: {}, partition: {}, timestamp: {} ",
+            log.info("Received Kafka message: {} , key: {}, topic: {}, partition: {}, timestamp: {} ",
                     student, key, topic, partition, timestamp);
-            if (student.getAction().equals(ActionEnum.CREATE)) {
-                studentService.createStudent(student.getStudentDto());
-            } else if (student.getAction().equals(ActionEnum.UPDATE)) {
-                studentService.update(student.getStudentDto().getId(),student.getStudentDto());
-            } else if (student.getAction().equals(ActionEnum.DELETE)) {
-                studentService.delete(student.getStudentDto().getId());
-            } else if (student.getAction().equals(ActionEnum.FIND_ALL)) {
-                studentService.findAll();
-            } else if (student.getAction().equals(ActionEnum.FIND_BY_ID)) {
-                studentService.findById(student.getStudentDto().getId());
+            switch (student.getAction()) {
+                case CREATE -> studentService.createStudent(student.getStudentDto());
+                case UPDATE -> studentService.update(student.getStudentDto().getId(), student.getStudentDto());
+                case DELETE -> studentService.delete(student.getStudentDto().getId());
+                case FIND_ALL -> studentService.findAll();
+                case FIND_BY_ID -> studentService.findById(student.getStudentDto().getId());
             }
+
         } catch (Exception e) {
-            log.error("Ошибка при обработке сообщения Kafka", e);
+            log.error("Error processing Kafka message", e);
         }
     }
 }

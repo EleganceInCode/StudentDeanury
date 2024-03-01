@@ -1,15 +1,25 @@
 package org.elvira.studentdeanury.server.repository.dao;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -18,7 +28,7 @@ import java.util.stream.Collectors;
 @ToString
 @Accessors(chain = true)
 @Entity
-@Table(name = "student")// todo имена таблиц в единственном числе пишем
+@Table(name = "student")
 public class StudentModel {
     @Id
     @GeneratedValue(generator = "UUID")
@@ -28,7 +38,7 @@ public class StudentModel {
     )
     private UUID id;
 
-    @Column(name = "login",nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String login;
 
     private String firstName;
@@ -47,13 +57,6 @@ public class StudentModel {
     )
     private Set<SubjectModel> subjectModels = new HashSet<>();
 
-    public void addSubject(SubjectModel subjectModel) {
-        this.subjectModels.add(subjectModel);
-    }
-
-    public void removeSubject(UUID subjectId) {
-        subjectModels = subjectModels.stream().filter(o -> !o.getId().equals(subjectId)).collect(Collectors.toSet());
-    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
