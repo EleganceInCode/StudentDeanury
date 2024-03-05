@@ -137,7 +137,7 @@ public class StudentService {
 
         if (studentDto.getSubjects() != null) {
             Set<SubjectModel> subjects = studentDto.getSubjects().stream()
-                    .map(this::getExistingSubjectOrThrow)//
+                    .map(this::getExistingSubjectOrThrow)
                     .collect(Collectors.toSet());
             student.setSubjectModels(subjects);
         }

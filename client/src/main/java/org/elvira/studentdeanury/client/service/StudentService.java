@@ -28,7 +28,7 @@ public class StudentService {
 
     public void update(@NonNull UUID studentId, @NonNull StudentDto student) {
         log.info("updateStudent method called");
-        if(studentId.equals(student.getId())) { //todo пробел потеряла. нужно делать Ctrl+Alt+L для автоформатирования. на всем проекте!
+        if (studentId.equals(student.getId())) {
             kafkaTemplate.send(topicName, new StudentModificationActionDto(student, ActionEnum.UPDATE));
         } else {
             log.error("Student ID from path and body do not mach");

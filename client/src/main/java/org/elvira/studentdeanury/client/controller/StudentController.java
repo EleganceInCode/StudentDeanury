@@ -7,15 +7,35 @@ import org.elvira.studentdeanury.codegen.model.CreateStudentResponse;
 import org.elvira.studentdeanury.codegen.model.StudentDto;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.MessageFormat;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping("/admin")
 @RequiredArgsConstructor
 public class StudentController implements StudentApi {
 
     private final StudentService studentService;
+
+    @GetMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<String> adminGet(@AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(
+                MessageFormat.format("Method by admin: {0}. Role is: {1}", userDetails.getUsername(),
+                        userDetails.getAuthorities().stream()
+                                .map(GrantedAuthority::getAuthority)
+                                .collect(Collectors.joining(",")))
+        );
+    }
 
     @Override
     public ResponseEntity<CreateStudentResponse> create(StudentDto studentDto) {
