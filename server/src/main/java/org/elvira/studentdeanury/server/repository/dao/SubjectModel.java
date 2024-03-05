@@ -32,7 +32,7 @@ public class SubjectModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id;// todo и тут тоже UUID
 
     @Column(name = "subject_name", unique = true)
     private String subjectName;
