@@ -79,7 +79,10 @@ public class StudentService {
         studentRepository
                 .findById(studentId)
                 .map(this::mapStudentModelToDto)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Student ID: %s not found", studentId)));
+                .orElseThrow(() -> new EntityNotFoundException(
+                        """
+                                Student ID: %s
+                                not found""".formatted(studentId)));
     }
 
     @Transactional
@@ -87,7 +90,10 @@ public class StudentService {
         log.info("Start updating student ID: {} ", studentId);
         StudentModel student = studentRepository
                 .findById(studentId)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Student ID: %s not found", studentId)));
+                .orElseThrow(() -> new EntityNotFoundException(
+                        """
+                                Student ID: %s
+                                not found""".formatted(studentId)));
         studentUpdate(student, studentDto);
         mapStudentModelToDto(studentRepository.save(student));
     }
@@ -106,7 +112,10 @@ public class StudentService {
 
     private SubjectModel getExistingSubjectOrThrow(SubjectDto subjectDto) {
         return subjectRepository.findBySubjectName(subjectDto.getSubjectName())
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Subject not found: %s ", subjectDto.getSubjectName())));
+                .orElseThrow(() -> new EntityNotFoundException(
+                        """
+                                Subject not found: %s
+                                """.formatted(subjectDto.getSubjectName())));
     }
 
     private StudentDto mapStudentModelToDto(StudentModel student) {
